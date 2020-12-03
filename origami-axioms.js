@@ -1,0 +1,125 @@
+const origamiStyle = {
+  diagrams: true,
+  attributes: {
+    boundaries: {
+      stroke: "black",
+      "stroke-width": 0.01,
+    },
+    edges: { 
+      "stroke-width": 0.01,
+      valley: {
+        stroke: "#158",
+        "stroke-width": 0.015,
+        "stroke-dasharray": "0.02 0.03",
+        "stroke-linecap": "round"
+      }
+    }
+  }
+};
+
+const foldedStyle = {
+  edges: false,
+  attributes: {
+    faces: {
+      "stroke-width": 0.01,
+      front: { stroke: "black", fill: "white" },
+      back: { stroke: "black", fill: "#fb4" }
+    }
+  }
+};
+
+let origami = {};
+let folded = {};
+
+let axiom;  // number 1 through 7
+let controls = svg.controls(0);
+let result; // solutions to current axiom
+let axiomSolutionIndex; // which solution 0,1,2 is being shown
+
+const cpLayer = svg.g().setClass("cp");
+const controlLayer = svg.g().setClass("touch-controls");
+const marksLayer = svg.g().setClass("marks");
+const foldedLayer = svg.g().setClass("folded");
+const axiomControlCount = [null, 2, 2, 4, 3, 4, 6, 5];
+const axiomPointCount = [null, 2, 2, 0, 1, 2, 2, 1];
+const axiomLineCount = [null, 0, 0, 2, 1, 1, 2, 2];
+
+const toAxiomParams = function (points) {
+  const numPoints = axiomPointCount[axiom];
+  const numLines = axiomLineCount[axiom];
+  return {
+    points: points.slice().splice(numLines*2),
+    lines: Array.from(Array(numLines))
+      .map((_, i) => ear.line.fromPoints(points[i*2+0], points[i*2+1]))
+  };
+};
+
+const drawParams = function (params) {
+  marksLayer.removeChildren();
+  if (!params.lines) { return; }
+  params.lines
+    .map(line => ear.graph.clip_line_in_boundary(origami, line.vector, line.origin))
+    .filter(a => a !== undefined)
+    .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
+      .strokeWidth(0.01)
+      .stroke("#fb4"));
+};
+
+const controlsOnChange = function (point, i, points) {
+  const params = toAxiomParams(points);
+  origami = ear.graph.square();
+  // origamiSVG.load( ear.svg(origami, origamiStyle) );
+  drawParams(params);
+  // calculate axiom
+  result = ear.axiom(axiom, params);
+  if (result === undefined) { return; }
+  if (result.constructor !== Array) { result = [result]; }
+  const foldLine = result.splice(axiomSolutionIndex, 1).shift();
+  origami = ear.graph.flat_fold(origami, foldLine.vector, foldLine.origin, 0);
+
+  result
+    // .forEach(line => origami.boundaries[0].clipLine(line)
+    .map(line => ear.graph.clip_line_in_boundary(origami, line.vector, line.origin))
+    .filter(a => a !== undefined)
+    .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
+      .strokeWidth(0.01)
+      .stroke("#000")
+      .opacity(0.1));
+  folded = JSON.parse(JSON.stringify(origami));
+  folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
+  ear.graph.translate(folded, 1 + 0.2 + 0.5, 0);
+  cpLayer.removeChildren();
+  cpLayer.load( ear.svg(origami, origamiStyle) );
+  foldedLayer.removeChildren();
+  foldedLayer.load( ear.svg(folded, foldedStyle) );
+  svg.size(-0.1, -0.1, 1 + 1 + 0.2*2 + 0.5, 1.2);
+};
+
+const rebuild = function () {
+  controlLayer.removeChildren();
+  controls.removeAll();
+  controls = svg.controls(axiomControlCount[axiom])
+    .svg(() => controlLayer.circle().radius(0.02).fill("#fb4").stroke("none"))
+    .position(() => [Math.random(), Math.random()])
+    .onChange(controlsOnChange, true);
+};
+
+const setAxiom = function (i) {
+  axiom = i;
+  axiomSolutionIndex = 0;
+  rebuild();
+};
+
+svg.onRelease = function (mouse) {
+//   if (mouse.drag.x === 0 && mouse.drag.y === 0) {
+//     axiomSolutionIndex = result.solutions
+//       .map(line => line.nearestPoint(mouse))
+//       .map(point => point.distanceTo(mouse))
+//       .map((d, i) => ({ d, i }))
+//       .sort((a, b) => a.d - b.d)
+//       .shift().i;
+//     controlsOnChange(controls);
+//   }
+};
+
+setAxiom(2);
