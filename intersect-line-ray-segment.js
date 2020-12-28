@@ -55,7 +55,7 @@ const redraw = function (p, i, points) {
   intersections
     .map(xing => xing.angles.map((_, i) => {
       const a = [xing.angles[i], xing.angles[(i + 1) % xing.angles.length]];
-      const dp = ear.math.bisect_vectors(
+      const dp = ear.math.counter_clockwise_bisect2(
         [Math.cos(a[0]), Math.sin(a[0])],
         [Math.cos(a[1]), Math.sin(a[1])]
       );

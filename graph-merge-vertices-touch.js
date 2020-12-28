@@ -55,16 +55,16 @@ svg.onMove = (e) => {
   if (selected === undefined) { return; }
 
   graph.vertices_coords[selected] = [e.x, e.y];
-  const result = ear.graph.merge_duplicate_vertices(graph, 0.02);
-  if (result.vertices.remove.length) {
-    const new_verts = result.vertices.remove.map(i => result.vertices.map[i]);
+  const result = ear.graph.remove_duplicate_vertices(graph, 0.02);
+  if (result.remove.length) {
+    const new_verts = result.remove.map(i => result.map[i]);
     // get the first one for animation. this leaves out any others.
     const coord = graph.vertices_coords[new_verts[0]];
     const circle = animLayer.circle(...coord, 0.015)
       .fill("#000");
     circle.setAttribute("class", "dup-vertices-spark");
     circle.setAttribute("transform-origin", `${coord[0]}px ${coord[1]}px`);
-    selected = result.vertices.map[selected];
+    selected = result.map[selected];
   }
   draw();
 };
@@ -77,10 +77,10 @@ svg.onRelease = (e) => {
 // let offsets = graph.vertices_coords.map(() => [0, 1].map(() => Math.random() * Math.PI * 2));
 
 // const animUpdate = () => {
-//   const result = ear.graph.merge_duplicate_vertices(graph, 0.02);
-//   if (result.vertices.remove.length) {
+//   const result = ear.graph.remove_duplicate_vertices(graph, 0.02);
+//   if (result.remove.length) {
 //     console.log(result);
-//     const new_verts = result.vertices.remove.map(i => result.vertices.map[i]);
+//     const new_verts = result.remove.map(i => result.map[i]);
 //     // get the first one for animation. this leaves out any others.
 //     const coord = graph.vertices_coords[new_verts[0]];
 //     const circle = animLayer.circle(...coord, 0.015)

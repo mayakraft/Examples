@@ -4,6 +4,7 @@ ear.graph.populate(graph);
 const faces_center = ear.graph.make_faces_center(graph);
 ear.graph.make_face_spanning_tree(graph, 0);
 svg.load(ear.svg(graph, { attributes: {edges: {mountain: {stroke:"#158"}, valley: {stroke:"#000"}}}}));
+svg.padding(0.02);
 const layer = svg.g();
 let last_face = undefined;
 

@@ -9,7 +9,7 @@ let targets = [];
 
 const update = (epsilon) => {
   const merged = JSON.parse(JSON.stringify(graph));
-  ear.graph.merge_duplicate_vertices(merged, epsilon);
+  ear.graph.remove_duplicate_vertices(merged, epsilon);
   ear.graph.populate(merged);
 
   svg.clear();

@@ -1,13 +1,17 @@
 var slider, countLabel;
 
 const graph = {};
-const NUM_EDGES = 10;
+const NUM_EDGES = 6;
 
 const update = (epsilon) => {
   const frag = JSON.parse(JSON.stringify(graph));
   ear.graph.fragment(frag, epsilon);
 
   svg.clear();
+	frag.vertices_coords.map(vert => svg
+		.circle(...vert, epsilon)
+		.fill("#e53")
+		.stroke("none"));
   svg.load( ear.svg(frag, {vertices: true, attributes: {
     svg: { "stroke-width": 0.005 },
     edges: { stroke: "black" },
@@ -18,12 +22,12 @@ const update = (epsilon) => {
 
 const makeNewGraph = () => {
   Object.keys(graph).forEach(key => delete graph[key]);
-  graph.vertices_coords = [[0.1, 0.5], [0.9, 0.5]];
+  graph.vertices_coords = [[0.05, 0.5], [0.95, 0.5]];
   graph.edges_vertices = [[0, 1]];
   for (let i = 0; i < NUM_EDGES; i += 1) {
     const pct = i / (NUM_EDGES-1);
     graph.vertices_coords.push(
-      [0.15 + 0.7 * pct, 0.5 + 0.05*pct], [0.15 + 0.7 * pct, 0.9]
+      [0.15 + 0.7 * pct, 0.51 + 0.05*pct], [0.15 + 0.7 * pct, 0.9]
     );
     graph.edges_vertices.push([i * 2 + 2, i * 2 + 3]);
   }

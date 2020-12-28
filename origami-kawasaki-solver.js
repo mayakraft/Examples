@@ -1,16 +1,17 @@
-svg.size(-1.1, -1.1, 2.2, 2.2);
-svg.strokeWidth(0.033);
-svg.strokeLinecap("round");
-
-svg.circle(1).fill("white").stroke("black");
-
 var slider; // HTML slider input
 var countLabel; // HTML <p> element
-var layer = svg.g();
-var controls;
 
-var solutions = [];
-var sliderCount = 5
+svg.size(-1.1, -1.1, 2.2, 2.2)
+  .strokeWidth(0.033)
+  .strokeLinecap("round");
+const layer = svg.g();
+svg.circle(1)
+  .fill("none")
+  .stroke("black");
+
+let controls;
+let solutions = [];
+let sliderCount = 5
 
 const updateLabel = () => {
   if (countLabel) {
@@ -23,19 +24,16 @@ const onChange = (p, i, points) => {
 
   points.map(p => ear.ray(p))
     .map(ray => ray.normalize())
-    .forEach(r => layer.line(r.origin, r.origin.add(r.vector))
-      .stroke("black"));
+    .forEach(r => layer.line(r.origin, r.origin.add(r.vector)).stroke("black"));
 
-  var radians = points
+  const radians = points
     .map(v => Math.atan2(v[1], v[0]))
     .sort((a, b) => a - b);
 
   solutions = ear.math.kawasaki_solutions_radians(radians)
     .filter(s => s !== undefined)
-    .map(angle => layer
-      .line(0, 0, Math.cos(angle), Math.sin(angle))
-      // .strokeDasharray("0.0333 0.0666")
-      .stroke("#e53"));
+    .map(angle => [Math.cos(angle), Math.sin(angle)])
+    .map(vec => layer.line(0, 0, ...vec).stroke("#e53"));
 
   updateLabel();
 };
@@ -43,8 +41,9 @@ const onChange = (p, i, points) => {
 const rebuildWithCreases = (count) => {
   if (controls) { controls.removeAll(); }
   controls = svg.controls(count)
-    .position(() => {
-      const angle = Math.random() * Math.PI * 2;
+    .position((_, i) => {
+      const randomNudge = Math.random() * Math.PI * 2 / count / 2;
+      const angle = Math.PI * 2 / count * i + randomNudge;
       return [Math.cos(angle), Math.sin(angle)];
     })
     .onChange(onChange, true);

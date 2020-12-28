@@ -61,8 +61,8 @@ const draw = () => {
 draw();
 
 const animUpdate = () => {
-  const result = ear.graph.merge_duplicate_vertices(graph, 0.02);
-  if (result.vertices.remove.length) {
+  const result = ear.graph.remove_duplicate_vertices(graph, 0.02);
+  if (result.remove.length) {
     if (graph.vertices_coords.length < 5 && timer === undefined) {
       timer = setTimeout(resetGraph, 5000);
     }
@@ -70,8 +70,8 @@ const animUpdate = () => {
       if (timer) { clearTimeout(timer); }
       timer = setTimeout(resetGraph, 1000);
     }
-    result.vertices.remove.sort((a,b) => b - a).forEach(i => vertex_map.splice(i, 1));
-    const new_verts = result.vertices.remove.map(i => result.vertices.map[i]);
+    result.remove.sort((a,b) => b - a).forEach(i => vertex_map.splice(i, 1));
+    const new_verts = result.remove.map(i => result.map[i]);
     const coord = graph.vertices_coords[new_verts[0]];
     const circle = animLayer.circle(...coord, 0.015)
       .fill("#000");

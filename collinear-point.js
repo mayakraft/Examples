@@ -89,5 +89,5 @@ svg.controls(11)
     const point_on = funcs
       .map((f, i) => f(points[10], ...args[i], EPSILON));
     const any = point_on.reduce((a, b) => a || b, false);
-    points[10].svg.fill(any ? "#fb4" : "black");
+    points[10].svg.fill(any ? "#e53" : "black");
   }, true);

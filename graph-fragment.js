@@ -16,20 +16,15 @@ const style = {
   }
 };
 
+const EDGES = 32;
+
 const graph = {};
-
-graph.vertices_coords = Array.from(Array(64)).map(() => []);
-graph.edges_vertices = Array.from(Array(graph.vertices_coords.length/2))
+graph.edges_vertices = Array.from(Array(EDGES))
   .map((_, i) => [i*2, i*2 + 1]);
-const freq = graph.vertices_coords
-  .map(() => [Math.random(), Math.random()]);
-var t = 12;
-graph.vertices_coords.forEach((vert, i) => {
-  graph.vertices_coords[i][0] = Math.cos(t * freq[i][0]);
-  graph.vertices_coords[i][1] = Math.sin(t * freq[i][1]);
-});
+graph.vertices_coords = Array.from(Array(EDGES * 2))
+  .map(() => [Math.cos, Math.sin]
+    .map(f => f(Math.PI*2 * Math.random())));
 
-svg.clear();
 svg.load(ear.svg(graph, style));
 
 ear.graph.translate(graph, 2.5, 0);
@@ -47,4 +42,5 @@ fragmented2.querySelector(".faces")
   .forEach((face, i, arr) => face.fill(`hsl(${i/arr.length*360}, 100%, 50%)`));
 svg.load(fragmented2);
 
-svg.size(-1.1, -1.1, 6+1, 2.2);
+svg.size(-1, -1, 7, 2)
+  .padding(0.05);

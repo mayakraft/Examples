@@ -5,7 +5,7 @@ const NUM_EDGES = 40;
 
 const update = (epsilon) => {
   const merged = JSON.parse(JSON.stringify(graph));
-  ear.graph.merge_duplicate_vertices(merged, epsilon);
+  ear.graph.remove_duplicate_vertices(merged, epsilon);
 
   svg.clear();
   svg.load( ear.svg(merged, {vertices: true, attributes: { edges: {

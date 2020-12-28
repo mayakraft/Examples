@@ -34,7 +34,7 @@ points.forEach((row, j) => {
 	});
 });
 
-ear.graph.find_planar_boundary(graph).edges.forEach(edge => {
+ear.graph.get_planar_boundary(graph).edges.forEach(edge => {
 	graph.edges_assignment[edge] = "B";
 });
 

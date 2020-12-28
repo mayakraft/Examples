@@ -9,7 +9,7 @@ const polygon = svg.polygon()
 
 svg.controls(8)
   .position(() => [svg.getWidth(), svg.getHeight()].map(n => n * Math.random()))
-  .svg(() => SVG.circle(12).fill("#e53"))
+  .svg(() => svg.circle(12).fill("#e53"))
   .onChange((p, i, arr) => {
     drawLayer.removeChildren();
     const hull = ear.math.convex_hull(arr);
