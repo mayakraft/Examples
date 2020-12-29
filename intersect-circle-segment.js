@@ -1,44 +1,26 @@
-svg.size(400, 300);
+svg.size(-2, -1, 4, 2)
+	.padding(0.25)
+	.strokeWidth(svg.getHeight() / 50);
 
-const boundary = ear.rect(svg.getWidth(), svg.getHeight());
-const strokeW = svg.getWidth()*0.015;
-
-const radius = Math.min(svg.getWidth() / 3, svg.getHeight() / 3);
-const circle = ear.circle(boundary.center, radius);
-
-const bottomLayer = svg.g();
+const circle = ear.circle(1);
 circle.svg()
   .appendTo(svg)
-  // .stroke("#fb4")
   .stroke("black")
-  .strokeWidth(strokeW)
-  .fill("white");
-const topLayer = svg.g();
+  .fill("none");
+const svgLine = svg.line().stroke("#fb4");
+const layer = svg.g();
 
 svg.controls(2)
-  .svg(() => svg.circle().fill("#e53").radius(strokeW * 3))
-  .position(() => [svg.getWidth(), svg.getHeight()].map(n => Math.random()))
-  .position((_, i) => [i === 0 ? 0 : svg.getWidth(), svg.getHeight()/2])
-  .onChange((p, i, pts) => {
-    topLayer.removeChildren();
-    bottomLayer.removeChildren();
-
-    const segment = ear.segment(...pts);
-    segment
-      .svg()
-      .appendTo(bottomLayer)
-      .stroke("#fb4")
-      .strokeWidth(strokeW);
-
+  .svg(() => svg.circle(svg.getHeight() / 15).fill("#e53"))
+  .position((_, i) => [i === 0 ? -2 : 2, 0])
+  .onChange((p, i, points) => {
+    layer.removeChildren();
+		svgLine.setPoints(points);
+    const segment = ear.segment(...points);
     const intersections = circle.intersect(segment);
     if (intersections === undefined) { return; }
-    if (intersections.length === 2) {
-      topLayer.line(intersections)
-        .stroke("#fb4")
-        .strokeWidth(strokeW)
-        .strokeDasharray(`${strokeW} ${strokeW * 2}`)
-        .strokeLinecap("round");
-    }
-
-    intersections.map(i => topLayer.circle(i[0], i[1], strokeW * 2).fill("#158"));
+    intersections.map(i => layer
+			.circle(i[0], i[1], svg.getHeight() / 20)
+			.fill("#158"));
   }, true);
+

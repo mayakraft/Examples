@@ -1,4 +1,4 @@
-svg.size(-1.25, -1.25, 2.5, 2.5);
+svg.size(-1, -1, 2, 2).padding(0.25);
 
 const strokeWidth = svg.getWidth()*0.02;
 const radius = strokeWidth * 2;
@@ -24,7 +24,7 @@ const layer = svg.g();
 const touchLayer = svg.g();
 
 svg.controls(2)
-  .svg(() => touchLayer.circle().radius(radius).fill("#e53"))
+  .svg(() => touchLayer.circle().radius(radius * 1.5).fill("#e53"))
   .position(() => [svg.getWidth(), svg.getHeight()]
     .map(l => l * (Math.random() - 0.5)))
   .onChange((p, i, points) => {

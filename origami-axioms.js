@@ -1,5 +1,4 @@
 const origamiStyle = {
-  diagrams: true,
   attributes: {
     boundaries: {
       stroke: "black",
@@ -58,11 +57,25 @@ const drawParams = function (params) {
   marksLayer.removeChildren();
   if (!params.lines) { return; }
   params.lines
-    .map(line => ear.graph.clip_line_in_boundary(origami, line.vector, line.origin))
+    .map(line => ear.graph.clip_line(origami, line))
     .filter(a => a !== undefined)
     .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
       .strokeWidth(0.01)
       .stroke("#fb4"));
+};
+
+const arrowhead = svg.marker()
+	.orient("auto-start-reverse")
+	.refY(0.5)
+	.markerWidth(4)
+	.markerHeight(4)
+	.setViewBox(0, 0, 1, 1);
+arrowhead.polygon(0, 0, 0, 1, Math.sqrt(3)/2, 0.5)
+	.fill("black")
+	.stroke("none");
+
+const shrinkArrow = (segment) => {
+	const mag = ear.math.magnitude(ear.math.subtract(...segment));
 };
 
 const controlsOnChange = function (point, i, points) {
@@ -79,12 +92,19 @@ const controlsOnChange = function (point, i, points) {
 
   result
     // .forEach(line => origami.boundaries[0].clipLine(line)
-    .map(line => ear.graph.clip_line_in_boundary(origami, line.vector, line.origin))
+    .map(line => ear.graph.clip_line(origami, line))
     .filter(a => a !== undefined)
     .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
       .strokeWidth(0.01)
       .stroke("#000")
       .opacity(0.1));
+	const arrows = ear.diagram.axiom_arrows[axiom](params, foldLine, origami);
+	// console.log(arrows);
+	arrows.forEach(seg => marksLayer.curve(seg[0], seg[1], 0.3)
+		.stroke("black")
+		.fill("none")
+		.strokeWidth(0.02)
+		.markerEnd(arrowhead));
   folded = JSON.parse(JSON.stringify(origami));
   folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
   ear.graph.translate(folded, 1 + 0.2 + 0.5, 0);
@@ -92,7 +112,7 @@ const controlsOnChange = function (point, i, points) {
   cpLayer.load( ear.svg(origami, origamiStyle) );
   foldedLayer.removeChildren();
   foldedLayer.load( ear.svg(folded, foldedStyle) );
-  svg.size(-0.1, -0.1, 1 + 1 + 0.2*2 + 0.5, 1.2);
+	svg.size(2.5, 1).padding(0.1);
 };
 
 const rebuild = function () {
