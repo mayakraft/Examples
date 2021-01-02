@@ -1,5 +1,5 @@
 svg.size(400, 100);
-svg.background("#fed", true);
+svg.background("#edb", true);
 
 var points = [];
 

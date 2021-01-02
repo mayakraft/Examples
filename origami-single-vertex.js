@@ -1,4 +1,5 @@
-svg.size(-0.1, -0.1, 3, 1.2)
+svg.size(2.5, 1)
+	.padding(0.1)
   .strokeWidth(0.01);
 const graphLayer = svg.g();
 
