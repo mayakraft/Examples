@@ -8,11 +8,13 @@ const circle = svg.circle(1).fill("white");
 const layerLayer = svg.g().translate(1.5, -0.1);
 
 const assignments = ["M", "V", "M", "V", "M", "M"];
-const junction = ear.junction([
+const junction = [
+// const junction = ear.junction([
   [0.53,-0.84], [0.83,-0.55], [0.99,0.12], [0.42,0.90], [-0.42,0.90], [-0.83,-0.55]
-]);
+];
+const sectors = ear.math.counter_clockwise_sectors2(junction);
 
-const lines = junction.vectors.map(vec => svg.line(vec))
+const lines = junction.map(vec => svg.line(vec))
 const scale = [0.9, 0.07];
 
 const update = () => {
@@ -22,14 +24,14 @@ const update = () => {
     .stroke(assignments[i] === "M" ? "#e53" : "#158")
     .strokeDasharray(assignments[i] === "M" ? "" : "0.0333 0.0444"));
 
-  const solutions = ear.graph.layer_solver(junction.sectors, assignments);
+  const solutions = ear.single.sectors_layer(sectors, assignments);
 
   circle.stroke(solutions.length ? "black" : "#e53");
   circle.fill(solutions.length ? "white" : "#e531");
 
   solutions.forEach((ordering, iter) => {
     let pos = 0;
-    const sector_end = junction.sectors.map((sec, i) => pos += i % 2 ? -sec : sec);
+    const sector_end = sectors.map((sec, i) => pos += i % 2 ? -sec : sec);
     const points = [];
     ordering.forEach((layer, sector, arr) => {
       points.push([sector_end[(sector + arr.length - 1) % arr.length], layer]);
@@ -43,7 +45,7 @@ const update = () => {
 update();
 
 svg.onPress = (e) => {
-  const nearest = ear.math.smallest_comparison_search([e.x, e.y], junction.vectors, ear.math.distance2);
+  const nearest = ear.math.smallest_comparison_search([e.x, e.y], junction, ear.math.distance2);
   assignments[nearest] = assignments[nearest] === "M" ? "V" : "M";
   update();
 };

@@ -28,7 +28,7 @@ svg.onRelease = () => { origamiBackup = origami.copy(); };
 
 svg.onMove = (mouse) => {
   if (mouse.buttons === 0) { return; }
-  const crease = ear.axiom[2](mouse.press, mouse.position);
+  const crease = ear.axiom(2, {points: [mouse.press, mouse.position] }).shift();
 	origami = origamiBackup.copy();
 	origami.flatFold(crease);
   layer.removeChildren();

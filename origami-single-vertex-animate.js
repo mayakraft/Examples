@@ -1,21 +1,22 @@
-svg.size(-0.1, -0.1, 3, 1.2)
-  .strokeWidth(0.01);
+svg.size(2.5, 1)
+	.padding(0.1)
+  .strokeWidth(0.01)
+	.overflow("visible");
+
 const graphLayer = svg.g();
 
 // CP style
-const style = {
-  attributes: {
-    boundaries: { stroke: "black" },
-    faces: {
-      back: { fill: "white" },
-      front: { fill: "#fb4" },
-    },
-    edges: {
-      mountain: { stroke: "black" },
-      valley: { stroke: "black", "stroke-dasharray": "0.025 0.015" },
-    }
+const style = { attributes: {
+  boundaries: { stroke: "black" },
+  faces: {
+    back: { fill: "white" },
+    front: { fill: "#fb4" },
+  },
+  edges: {
+    mountain: { stroke: "black" },
+    valley: { stroke: "black", "stroke-dasharray": "0.025 0.015" },
   }
-};
+}};
 
 // folded form style. same as CP with small changes
 const foldedStyle = JSON.parse(JSON.stringify(style));
@@ -24,9 +25,6 @@ foldedStyle.attributes.faces.stroke = "black";
 delete foldedStyle.attributes.boundaries;
 
 const base = ear.cp.square();
-// base.segment([0.5, 0.5], [0, 0]);
-// base.segment([0.5, 0.5], [1, 0]);
-// base.segment([0.5, 0.5], [1, 1]);
 // add a vertex in the middle. this vertex will move around.
 let vertex = ear.graph.add_vertices(base, [0.5, 0.5]).shift();
 // 3 new edges connecting corners to the new vertex
@@ -46,26 +44,30 @@ const update = (point) => {
 
   // load the 3 crease CP
   const origami = ear.cp(base);
-  window.origami = origami;
   origami.vertices_coords[vertex] = [point.x, point.y];
   // this gives us edges_vector, we need it for the kawasaki calculation
   origami.populate();
 
   // make a junction that contains the three edges' vectors
   // this automatically sorts them counter-clockwise
-  const junction = ear.junction(edges3.map(i => origami.edges_vector[i]));
+  // const junction = ear.junction(edges3.map(i => origami.edges_vector[i]));
   // this gives us (possible) solutions for all 3 sectors. the large sector
   // is at index 2, this is the only one we're looking to solve.
-  const solution = ear.math.kawasaki_solutions(junction.vectors)[2];
+	const edges_vectors = edges3.map(i => origami.edges_vector[i]);
+	const sortedVectors = ear.math.counter_clockwise_order2(edges_vectors)
+		.map(i => edges_vectors[i]);
+  // this returns solutions for 3 sectors. the large sector is at index 2
+  const solution = ear.single.kawasaki_solutions(sortedVectors)[2];
   if (!solution) { return; }
-  origami.ray(solution, origami.vertices_coords[vertex]);
+
+	origami.ray(solution, origami.vertices_coords[vertex]);
   // fragment rebuilds the graph. need to re-find the vertex at the center
   vertex = ear.graph.nearest_vertex(origami, [point.x, point.y]);
 
   const sectors = origami.vertices_sectors[vertex];
   const assignments = origami.vertices_edges[vertex]
     .map(edge => origami.edges_assignment[edge]);
-  const res = ear.graph.assignment_solver(sectors, assignments);
+  const res = ear.single.layer_solver(sectors, assignments);
   if (!res.length) { return; }
 
   res[0].assignment.forEach((a, i) => {
@@ -82,17 +84,23 @@ const update = (point) => {
     origami["faces_re:layer"][origami.vertices_faces[vertex][i]] = layer;
   });
   // copy origami, fold the vertices, translate it to the right a little
-  const folded = JSON.parse(JSON.stringify(origami));
+  const folded = origami.copy();
   folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
+  // const center = ear.rect(ear.math.enclosing_rectangle(folded.vertices_coords)).centroid();
   const center = ear.math.average(...folded.vertices_coords);
-  ear.graph.translate(folded, 2 - center[0], 0.5 - center[1]);
+  ear.graph.translate(folded, 1.75 - center[0], 0.5 - center[1]);
 
   graphLayer.removeChildren();
   graphLayer.load(ear.svg(origami, style));
   graphLayer.load(ear.svg(folded, foldedStyle));
 };
 
-svg.onPress = update;
+let releaseTimeout;
+
+svg.onPress = () => {
+  if (releaseTimeout) { clearTimeout(releaseTimeout); }
+  svg.stop();
+};
 
 svg.onMove = (mouse) => {
   if (mouse.buttons) {
@@ -100,7 +108,46 @@ svg.onMove = (mouse) => {
   }
 };
 
-update({
-  x: 0.4 + Math.random() * 0.2,
-  y: 0.4 + Math.random() * 0.2
-});
+svg.onRelease = () => {
+  if (releaseTimeout) { clearTimeout(releaseTimeout); }
+  releaseTimeout = setTimeout(function () {
+    svg.play = playFunc;
+    startTime = 0;
+  }, 2000);
+};
+
+let startTime = 1.0 + Math.random()*2;
+let step = 0.01;
+const duration = 16;
+const waitDuration = 0.2;
+let runDuration = 8.0;
+
+const drawFrame = (phase) => {
+  let scale = 0.45;
+  let point = ear.vector(
+    Math.sin(phase + (Math.cos(phase / 3) ** 2) - (Math.sin(phase / 4) ** 3)),
+    Math.cos(phase + (Math.sin(phase / 4) ** 2) - (Math.cos(phase / 5) ** 3)));
+  // convert between -1:1 to between 0:1
+  const newCenter = point.scale(scale).add([0.5, 0.5]);
+  update(newCenter);
+};
+
+let animPhase = Math.random() * 20;
+drawFrame(animPhase);
+
+const playFunc = (event) => {
+  if (event.time > startTime) {
+    let t = (event.time - startTime) / runDuration;
+    let inc = (1.0 - Math.cos(t*Math.PI*2))*0.5;
+    animPhase += inc * step;
+    if (t >= 1) {
+      startTime = event.time + Math.random() * waitDuration;  // wait time
+      runDuration = 2.0 + Math.random() * duration;
+    }
+    drawFrame(animPhase);
+  }
+};
+
+svg.play = playFunc;
+
+

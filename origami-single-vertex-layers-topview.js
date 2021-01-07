@@ -35,7 +35,7 @@ svg.load(ear.svg(graph, {
   }
 }));
 
-const layers = ear.graph.layer_solver(sectors, assignments)
+const layers = ear.single.sectors_layer(sectors, assignments)
   .shift();
 
 const vertices_coords = ear.graph.make_vertices_coords_folded(graph);

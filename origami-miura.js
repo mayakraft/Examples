@@ -1,7 +1,9 @@
-const graph = {};
+var callback;
 
+const graph = {};
 const SIZE = 8;
 const wave = 1;
+
 const points = Array.from(Array(SIZE + 1))
 	.map(() => Array.from(Array(SIZE + 1)))
 	.map((row, y) => row
@@ -34,6 +36,7 @@ points.forEach((row, j) => {
 	});
 });
 
+
 ear.graph.get_planar_boundary(graph).edges.forEach(edge => {
 	graph.edges_assignment[edge] = "B";
 });
@@ -44,6 +47,5 @@ svg.load( ear.svg(graph, { attributes: { edges: {
 	valley: { stroke: "black", "stroke-dasharray": "0.01" },
 }}}) );
 
-const pad = 0.025;
-const padding = [-pad, -pad, pad * 2, pad * 2]
-svg.size(...svg.getViewBox().map((n, i) => n + padding[i]));
+svg.padding(0.025);
+

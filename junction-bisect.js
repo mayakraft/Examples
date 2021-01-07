@@ -8,13 +8,14 @@ const vmin = (svg.getWidth() > svg.getHeight()
 
 const onChange = function (point, i, points) {
   const vectors = ear.math
-    .counter_clockwise_vector_order(...points)
+    .counter_clockwise_order2(points)
     .map(i => points[i]);
   const angles = vectors.map(v => Math.atan2(v[1], v[0]));
   const bisections = vectors
     .map((v, i, arr) => [v, arr[(i + 1) % arr.length]])
     .map(vecs => ear.math.counter_clockwise_bisect2(...vecs));
-  const radii = ear.math.interior_angles(...vectors)
+	const radii = ear.math.counter_clockwise_sectors2(vectors)
+  // const radii = ear.math.interior_angles(...vectors)
     .map(angle => vmin * 0.4 - ((angle / (Math.PI * 2)) ** 0.5) * vmin * 0.25);
   // draw
   svg.removeChildren();
