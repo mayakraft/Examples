@@ -15,6 +15,9 @@ svg.style(`@keyframes dup-vertices-spark-frames {
   animation: dup-vertices-spark-frames 0.3s ease-out normal forwards;
 }
 `);
+
+svg.size(1, 1).strokeWidth(0.015);
+
 const graphLayer = svg.g();
 const animLayer = svg.g();
 
@@ -41,21 +44,10 @@ resetGraph();
 
 const draw = () => {
   graphLayer.removeChildren();
-  graphLayer.load(ear.svg(graph, {
-    vertices: true,
-    attributes: {
-      circle: { r: 0.02 },
-      vertices: {
-        stroke: "black",
-        "stroke-width": 0.015,
-        fill: "white",
-      },
-      edges: {
-        stroke: "black",
-        "stroke-width": 0.015,
-      }
-    }
-  }));
+	const drawing = graphLayer.graph(graph);
+	drawing.vertices.stroke("black").fill("white").childNodes
+		.forEach(vert => vert.setRadius(0.02));
+	drawing.edges.stroke("black");
 };
 
 draw();

@@ -48,13 +48,14 @@ let shape;
 let primitive;
 let count = 0;
 
-cpLayer.load( ear.svg(cp, cpStyle) );
+cpLayer.graph(cp);
 
 svg.onPress = (e) => {
 	if (count % 3 === 0) { 
 		cp = cpBase.copy();
 		cpLayer.removeChildren();
-		cpLayer.load(ear.svg(cp, cpStyle));
+		cpLayer.graph(cp);
+		// cpLayer.load(ear.svg(cp, cpStyle));
 	}
 	count++;
   // cpLayer.load( ear.svg(cp, cpStyle) );
@@ -82,7 +83,8 @@ svg.onRelease = (e) => {
   if (count % 2) { res.mountain(); }
   else { res.valley(); }
 	cpLayer.removeChildren();
-  cpLayer.load( ear.svg(cp, cpStyle) );
+  // cpLayer.load( ear.svg(cp, cpStyle) );
+	cpLayer.graph(cp);
 	// console.log(cp);
 	if (callback) {
     callback({ cp: cp.copy() });

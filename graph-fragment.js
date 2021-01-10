@@ -1,20 +1,4 @@
-const style = {
-  vertices: true,
-  attributes: {
-    circle: { r: 0.02 },
-    vertices: {
-      stroke: "black",
-      fill: "white"
-    },
-    edges: {
-      unassigned: { stroke: "black" },
-    },
-    faces: {
-      front: { fill: "none" },
-      back: { fill: "none" },
-    }
-  }
-};
+svg.strokeWidth(1 / 100);
 
 const EDGES = 32;
 
@@ -25,22 +9,30 @@ graph.vertices_coords = Array.from(Array(EDGES * 2))
   .map(() => [Math.cos, Math.sin]
     .map(f => f(Math.PI*2 * Math.random())));
 
-svg.load(ear.svg(graph, style));
+const one = svg.graph(graph);
+one.vertices.fill("white");
+one.vertices.stroke("black");
+one.vertices.childNodes.forEach(vert => vert.setRadius(0.02));
 
 ear.graph.translate(graph, 2.5, 0);
 ear.graph.fragment(graph);
 
-const fragmented = ear.svg(graph, style);
-svg.load(fragmented);
+const two = svg.graph(graph);
+two.vertices.fill("white");
+two.vertices.stroke("black");
+two.vertices.childNodes.forEach(vert => vert.setRadius(0.02));
 
 ear.graph.translate(graph, 2.5, 0);
 ear.graph.populate(graph);
 
-const fragmented2 = ear.svg(graph, style);
-fragmented2.querySelector(".faces")
-  .childNodes
-  .forEach((face, i, arr) => face.fill(`hsl(${i/arr.length*360}, 100%, 50%)`));
-svg.load(fragmented2);
+const three = svg.graph(graph);
+three.vertices.fill("white");
+three.vertices.stroke("black");
+three.vertices.childNodes.forEach(vert => vert.setRadius(0.02));
+three.faces
+	.childNodes
+	.forEach((face, i, arr) => face.fill(`hsl(${i/arr.length*360}, 100%, 50%)`));
 
 svg.size(-1, -1, 7, 2)
   .padding(0.05);
+

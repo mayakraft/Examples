@@ -1,21 +1,23 @@
+svg.size(1, 1)
+	.padding(0.05)
+	.strokeWidth(0.01);
+
 const graph = ear.graph.kite();
-svg.load(ear.svg(graph, { vertices: true, attributes: { circle: { r: 0.01 }} }));
-svg.size(-0.05, -0.05, 1.1, 1.1);
+svg.graph(graph);
 
-const splitGraph = (g, edge, mouse) => {
-  const res = ear.graph.split_edge(g, edge, [mouse.x, mouse.y]);
+const splitGraph = (g, edge, pos) => {
+  ear.graph.split_edge(g, edge, [pos[0], pos[1]]);
   svg.removeChildren();
-  svg.load(ear.svg(g, { vertices: true, attributes: { circle: { r: 0.01 }} }));
-  svg.size(-0.05, -0.05, 1.1, 1.1);
-  return res;
+	svg.graph(g);
 };
 
-svg.onPress = (mouse) => {
-  const edge = ear.graph.nearest_edge(graph, [mouse.x, mouse.y]);
-  const res = splitGraph(graph, edge, mouse);
+svg.onPress = (event) => {
+  const edge = ear.graph.nearest_edge(graph, event.position);
+  splitGraph(graph, edge, event.position);
 };
 
-svg.onMove = (mouse) => {
-  const edge = ear.graph.nearest_edge(graph, [mouse.x, mouse.y]);
-  splitGraph(JSON.parse(JSON.stringify(graph)), edge, mouse);
+svg.onMove = (event) => {
+  const edge = ear.graph.nearest_edge(graph, event.position);
+  splitGraph(JSON.parse(JSON.stringify(graph)), edge, event.position);
 };
+

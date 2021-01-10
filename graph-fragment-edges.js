@@ -3,6 +3,7 @@ var slider, countLabel;
 const graph = {};
 const NUM_EDGES = 15;
 
+svg.size(1, 1).strokeWidth(0.005);
 const layer = svg.g().strokeWidth(0.015);
 
 const reset = () => {
@@ -19,12 +20,11 @@ const reset = () => {
 
   ear.graph.fragment(graph);
   ear.graph.populate(graph);
-
-  svg.clear();
-  svg.load( ear.svg(graph, {vertices: true, faces: false, attributes: {
-    edges: { unassigned: { stroke: "#e53" } },
-    circle: { r: 0.0075, stroke: "#e53", fill: "white" },
-  }}) );
+	svg.removeChildren();
+	let drawing = svg.graph(graph);
+	drawing.vertices.fill("white").stroke("#e53");
+	drawing.vertices.childNodes.forEach(v => v.setRadius(0.0075));
+	drawing.edges.stroke("#e53");
   layer.removeChildren();
   svg.appendChild(layer);
 };
@@ -52,6 +52,3 @@ if (slider) {
 
 svg.onPress = reset;
 
-// svg.onMove = (e) => {
-//   highlightEdge(parseInt(e.x * graph.edges_vertices.length));
-// };

@@ -41,11 +41,12 @@ ear.graph.get_planar_boundary(graph).edges.forEach(edge => {
 	graph.edges_assignment[edge] = "B";
 });
 
-svg.load( ear.svg(graph, { attributes: { edges: {
-	boundary: { "stroke-width": 0.015, "stroke-linecap": "round" },
-	mountain: { stroke: "black" },
-	valley: { stroke: "black", "stroke-dasharray": "0.01" },
-}}}) );
+const drawing = svg.graph(graph);
+drawing.boundaries.strokeWidth(0.015).strokeLinecap("round");
+drawing.edges.mountain.stroke("black");
+drawing.edges.valley.stroke("black").strokeDasharray("0.01");
 
-svg.padding(0.025);
+svg.size(1.2, 1.2)
+	.padding(0.025)
+	.strokeWidth(0.01);
 

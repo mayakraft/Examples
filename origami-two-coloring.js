@@ -5,7 +5,8 @@ const graph = {
 
 const faces_color = ear.graph.make_faces_coloring(graph, 0)
   .map(v => v ? "#158" : "#fb4");
-const faces = ear.svg(graph).querySelectorAll(".faces")[0];
+const faces = ear.graph.svg(graph).faces;
 faces.childNodes.forEach((face, i) => face.fill(faces_color[i]));
 svg.load(faces);
 svg.size(1, 1);
+

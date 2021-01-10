@@ -96,7 +96,8 @@ const onChange = (point, i, points) => {
   const foldLine = result.splice(axiomSolutionIndex, 1).shift();
 	if (foldLine === undefined) {
 		// axiom is not constructible
-  	resultLayer.load( ear.svg(ear.graph.square(), origamiStyle) );
+		resultLayer.graph(ear.graph.square());
+  	// resultLayer.load( ear.svg(ear.graph.square(), origamiStyle) );
 		return;
 	}
 
@@ -120,8 +121,10 @@ const onChange = (point, i, points) => {
   const folded = JSON.parse(JSON.stringify(origami));
   folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
   ear.graph.translate(folded, 1.5, 0);
-  resultLayer.load( ear.svg(origami, origamiStyle) );
-  foldedLayer.load( ear.svg(folded, foldedStyle) );
+
+	const cpDraw = resultLayer.graph(origami);
+	const foldDraw = foldedLayer.graph(folded);
+	
 	svg.size(2.5, 1).padding(0.1);
 
 	if (callback) {

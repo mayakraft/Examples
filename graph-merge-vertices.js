@@ -1,5 +1,6 @@
 var slider, countLabel;
-
+svg.size(1, 1)
+	.strokeWidth(1 / 200);
 const graph = {};
 const NUM_EDGES = 20;
 const NUM_VERTS = 6;
@@ -12,24 +13,12 @@ const update = (epsilon) => {
   ear.graph.remove_duplicate_vertices(merged, epsilon);
   ear.graph.populate(merged);
 
-  svg.clear();
-  svg.load( ear.svg(merged, {vertices: true, attributes: { 
-    circle: {
-      fill: "white",
-      r: 0.005,
-      stroke: "black",
-      "stroke-width": 0.005,
-    },
-    edges: {
-      unassigned: { stroke: "black" },
-    },
-    faces: {
-      front: { fill: "#fb4" },
-      back: { fill: "#fb4" },
-    }
-  }}) );
-
-  svg.size(...svg.getViewBox().map((n, i) => n + [-0.05, -0.05, 0.1, 0.1][i] ));
+  svg.removeChildren();
+	const drawing = svg.graph(merged);
+	drawing.vertices.fill("white").stroke("black").childNodes
+		.forEach(vert => vert.setRadius(0.005));
+	drawing.edges.stroke("black");
+	drawing.faces.fill("#fb4");
 };
 
 const makeNewGraph = () => {

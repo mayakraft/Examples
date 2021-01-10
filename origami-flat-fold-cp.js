@@ -20,8 +20,12 @@ const startAngle = Math.random() * 0.5 + 2.25;
 const startCrease = ear.line.fromAngle(startAngle).translate(0.25, 0.25);
 origami.flatFold(startCrease);
 
-layer.load(ear.svg(origami.copy().translate(1.25, 0), cpStyle));
-layer.load(ear.svg(origami.folded(), style));
+layer.graph(origami.copy().translate(1.25, 0));
+const drawing = layer.graph(origami.folded());
+drawing.edges.remove();
+drawing.faces.stroke("black");
+drawing.faces.front.forEach(f => f.fill("#fb4"));
+drawing.faces.back.forEach(f => f.fill("white"));
 
 svg.onPress = () => { origamiBackup = origami.copy(); };
 svg.onRelease = () => { origamiBackup = origami.copy(); };
@@ -32,7 +36,12 @@ svg.onMove = (mouse) => {
 	origami = origamiBackup.copy();
 	origami.flatFold(crease);
   layer.removeChildren();
-  layer.load(ear.svg(origami.copy().translate(1.25, 0), cpStyle));
-  layer.load(ear.svg(origami.folded(), style));
+	layer.graph(origami.copy().translate(1.25, 0));
+	const drawing = layer.graph(origami.folded());
+	drawing.edges.remove();
+	drawing.faces.stroke("black");
+	drawing.faces.front.forEach(f => f.fill("#fb4"));
+	drawing.faces.back.forEach(f => f.fill("white"));
 };
+
 

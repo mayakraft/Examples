@@ -26,14 +26,9 @@ const graph = {
 };
 
 ear.graph.populate(graph);
-svg.load(ear.svg(graph, {
-  attributes: {
-    edges: {
-      mountain: { stroke: "black",  },
-      valley: { stroke: "black", "stroke-dasharray": 0.04 },
-    }
-  }
-}));
+const cpdraw = svg.graph(graph);
+cpdraw.edges.mountain.stroke("black");
+cpdraw.edges.valley.stroke("black").strokeDasharray(0.04);
 
 const layers = ear.single.sectors_layer(sectors, assignments)
   .shift();
@@ -48,16 +43,12 @@ const foldedGraph = ear.graph.translate({
 }, 2.4, -0.4);
 
 const foldedLayer = svg.g();
-
-foldedLayer.load(ear.svg(foldedGraph, {
-  edges: false,
-  attributes: {
-    faces: {
-      front: { stroke: "black", fill: "#fb4" },
-      back: { stroke: "black" }
-    }
-  }
-}));
+const foldedDraw = foldedLayer.graph(foldedGraph);
+foldedDraw.vertices.remove();
+foldedDraw.edges.remove();
+foldedDraw.faces.stroke("black");
+foldedDraw.faces.front.forEach(face => face.fill("#fb4"));
+foldedDraw.faces.back.forEach(face => face.fill("white"));
 
 svg.strokeWidth(0.015)
 svg.size(-1, -1, 4, 2);
@@ -71,3 +62,4 @@ svg.onRelease = () => foldedLayer
   .querySelector(".faces")
   .childNodes
   .forEach(face => face.opacity(1.0));
+

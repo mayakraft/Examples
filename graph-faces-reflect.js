@@ -6,16 +6,18 @@ const graph = {
   faces_vertices: [[1,0,7,6], [2,1,6,5], [3,2,5,4]]
 };
 
-svg.load(ear.svg(graph, { faces: false }));
+svg.size(0, -0.5, 5, 2)
+	.strokeWidth(1/100);
+
+svg.graph(graph);
 
 graph.file_classes = ["foldedForm"];
-
 const vertices_coords = ear.graph.make_vertices_coords_folded(graph);
 const translated = ear.graph.translate({ ...graph, vertices_coords }, 3.5, 0);
 
-svg.load(ear.svg(translated, {
-  edges: false,
-  attributes: { faces: { stroke: "#000" } }
-}));
+const faces = ear.graph.svg.faces(translated).appendTo(svg);
+faces.fill("lightgray");
+faces.stroke("black");
+faces.front.fill("#fb4");
+faces.back.fill("white");
 
-svg.size(0, -0.5, 5, 2);

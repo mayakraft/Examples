@@ -1,29 +1,10 @@
+var callback;
+
 svg.size(2.5, 1)
 	.padding(0.1)
   .strokeWidth(0.01);
 
 const graphLayer = svg.g();
-
-// CP style
-const style = {
-  attributes: {
-    boundaries: { stroke: "black" },
-    faces: {
-      back: { fill: "white" },
-      front: { fill: "#fb4" },
-    },
-    edges: {
-      mountain: { stroke: "black" },
-      valley: { stroke: "black", "stroke-dasharray": "0.025 0.015" },
-    }
-  }
-};
-
-// folded form style. same as CP with small changes
-const foldedStyle = JSON.parse(JSON.stringify(style));
-foldedStyle.edges = false;
-foldedStyle.attributes.faces.stroke = "black";
-delete foldedStyle.attributes.boundaries;
 
 // create a base with 3 creases to 3 corners
 const base = ear.cp.square();
@@ -83,8 +64,19 @@ const update = (point) => {
   ear.graph.translate(folded, 2 - center[0], 0.5 - center[1]);
 
   graphLayer.removeChildren();
-  graphLayer.load(ear.svg(origami, style));
-  graphLayer.load(ear.svg(folded, foldedStyle));
+	const draw1 = graphLayer.graph(origami)
+	draw1.edges.mountain.stroke("black");
+	draw1.edges.valley.stroke("black").strokeDasharray("0.025 0.015");
+
+	const foldedDraw = graphLayer.graph(folded);
+	foldedDraw.edges.remove();
+	foldedDraw.faces.stroke("black");
+	foldedDraw.faces.back.forEach(f => f.fill("white"));
+	foldedDraw.faces.front.forEach(f => f.fill("#fb4"));
+
+	if (callback) {
+		callback({ sectors });
+	}
 };
 
 svg.onPress = update;

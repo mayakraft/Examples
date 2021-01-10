@@ -71,23 +71,14 @@ const rebuildCreases = (p, i, points) => {
   const errorCount = reportErrors(bisect_edges, kawasaki_edges);
 
   cpLayer.removeChildren();
-  cpLayer.load( ear.svg(cp, {
-    attributes: {
-      boundaries: {
-        stroke: "black",
-        "stroke-width": 0.06,
-      },
-      edges: {
-        "stroke-width": 0.03,
-        mountain: { stroke: "black" },
-        valley: {
-          stroke: "black",
-          "stroke-linecap": "round",
-          "stroke-dasharray": "0.07"
-        },
-      }
-    }
-  }));
+ 	const cpDraw = cpLayer.graph(cp);
+	cpDraw.boundaries.strokeWidth(0.06);
+	cpDraw.edges.strokeWidth(0.03);
+	cpDraw.edges.mountain.stroke("black");
+	cpDraw.edges.valley
+		.stroke("black")
+		.strokeLinecap("round")
+		.strokeDasharray("0.07");
 
 	if (errorCount) { return; }
 
@@ -95,16 +86,7 @@ const rebuildCreases = (p, i, points) => {
 	cp.populate();
 	cp.vertices_coords = ear.graph.make_vertices_coords_folded(cp, face);
 	ear.graph.translate(cp, 3.25);
-	
-	cpLayer.load( ear.svg(cp, {
-		edges: false,
-		attributes: {
-			faces: {
-				front: { fill: "#0003" },
-				back: { fill: "#0003" },
-			}
-  	}
-	}));
+	ear.graph.svg.faces(cp).appendTo(cpLayer).fill("#0003");
 };
 
 const controls = svg.controls(4)

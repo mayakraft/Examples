@@ -4,26 +4,6 @@ svg.size(2.5, 1)
 	.overflow("visible");
 
 const graphLayer = svg.g();
-
-// CP style
-const style = { attributes: {
-  boundaries: { stroke: "black" },
-  faces: {
-    back: { fill: "white" },
-    front: { fill: "#fb4" },
-  },
-  edges: {
-    mountain: { stroke: "black" },
-    valley: { stroke: "black", "stroke-dasharray": "0.025 0.015" },
-  }
-}};
-
-// folded form style. same as CP with small changes
-const foldedStyle = JSON.parse(JSON.stringify(style));
-foldedStyle.edges = false;
-foldedStyle.attributes.faces.stroke = "black";
-delete foldedStyle.attributes.boundaries;
-
 const base = ear.cp.square();
 // add a vertex in the middle. this vertex will move around.
 let vertex = ear.graph.add_vertices(base, [0.5, 0.5]).shift();
@@ -91,8 +71,16 @@ const update = (point) => {
   ear.graph.translate(folded, 1.75 - center[0], 0.5 - center[1]);
 
   graphLayer.removeChildren();
-  graphLayer.load(ear.svg(origami, style));
-  graphLayer.load(ear.svg(folded, foldedStyle));
+  // graphLayer.load(ear.svg(origami, style));
+  // graphLayer.load(ear.svg(folded, foldedStyle));
+	const flat = graphLayer.graph(origami);
+	flat.edges.mountain.stroke("black");
+	flat.edges.valley.stroke("black").strokeDasharray("0.025 0.015");
+	const foldedDraw = graphLayer.graph(folded);
+	foldedDraw.edges.remove();
+	foldedDraw.faces.stroke("black");
+	foldedDraw.faces.back.forEach(f => f.fill("white"));
+	foldedDraw.faces.front.forEach(f => f.fill("#fb4"));
 };
 
 let releaseTimeout;

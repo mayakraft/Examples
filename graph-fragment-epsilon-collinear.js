@@ -3,21 +3,23 @@ var slider, countLabel;
 const graph = {};
 const NUM_EDGES = 6;
 
+svg.size(0, 0.45, 1, 0.5)
+	.stroke("black")
+	.strokeWidth(0.005);
+
 const update = (epsilon) => {
   const frag = JSON.parse(JSON.stringify(graph));
   ear.graph.fragment(frag, epsilon);
 
-  svg.clear();
+  svg.removeChildren();
 	frag.vertices_coords.map(vert => svg
 		.circle(...vert, epsilon)
 		.fill("#e53")
 		.stroke("none"));
-  svg.load( ear.svg(frag, {vertices: true, attributes: {
-    svg: { "stroke-width": 0.005 },
-    edges: { stroke: "black" },
-    circle: { r: 0.0075, stroke: "black", fill: "white" },
-  }}) );
-  svg.size(svg.getViewBox().map((n, i) => n + [-0.02, -0.02, 0.04, 0.04][i]));
+	const drawing = svg.graph(frag);
+	drawing.vertices.stroke("black").fill("white").childNodes
+		.forEach(vert => vert.setRadius(0.0075));
+	drawing.edges.stroke("black");
 };
 
 const makeNewGraph = () => {
