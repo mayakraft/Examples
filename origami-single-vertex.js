@@ -4,16 +4,15 @@ svg.size(2.5, 1)
 	.padding(0.1)
   .strokeWidth(0.01);
 
-const graphLayer = svg.g();
-
 // create a base with 3 creases to 3 corners
+// the fourth will be calculated using Kawasaki's theorem
 const base = ear.cp.square();
 base.segment([0.5, 0.5], [0, 0]);
 base.segment([0.5, 0.5], [1, 0]);
 base.segment([0.5, 0.5], [1, 1]);
 
 // get the indices of the center vertex and the 3 creases
-const vertex = base.nearest(0.5, 0.5).vertex.index;
+const vertex = base.nearest(0.5, 0.5).vertex;
 const edges3 = base.vertices_edges[vertex];
 
 // keep the point inside the unit square
@@ -27,52 +26,51 @@ const limitPoint = (point, ep = ear.math.EPSILON) => {
 
 const update = (point) => {
   point = limitPoint(point);
-	const origami = base.copy();
-  origami.vertices_coords[vertex] = [point.x, point.y];
+	const cp = base.copy();
+  cp.vertices_coords[vertex] = [point.x, point.y];
   // this gives us edges_vector, we need it for the kawasaki calculation
-  origami.populate();
+  cp.populate();
   // make a junction to sort the edges counter-clockwise
-  // const junction = ear.junction(edges3.map(i => origami.edges_vector[i]));
-	const edges_vectors = edges3.map(i => origami.edges_vector[i]);
+	const edges_vectors = edges3.map(i => cp.edges_vector[i]);
 	const sortedVectors = ear.math.counter_clockwise_order2(edges_vectors)
 		.map(i => edges_vectors[i]);
   // this returns solutions for 3 sectors. the large sector is at index 0
   const solution = ear.single.kawasaki_solutions(sortedVectors)[0];
   if (!solution) { return; }
-  origami.ray(solution, origami.vertices_coords[vertex]);
+  cp.ray(solution, cp.vertices_coords[vertex]);
 
-  const sectors = origami.vertices_sectors[vertex];
-  const assignments = origami.vertices_edges[vertex]
-    .map(edge => origami.edges_assignment[edge]);
+	// single vertex layer order calculation
+	// todo: this should become wrapped up in one big "fold" operation.
+  const sectors = cp.vertices_sectors[vertex];
+  const assignments = cp.vertices_edges[vertex]
+    .map(edge => cp.edges_assignment[edge]);
   const res = ear.single.layer_solver(sectors, assignments);
   if (!res.length) { return; }
   // there will be only one solution, but all we need is one anyway
   res[0].assignment.forEach((a, i) => {
-    origami.edges_assignment[ origami.vertices_edges[vertex][i] ] = a;
+    cp.edges_assignment[ cp.vertices_edges[vertex][i] ] = a;
   });
-  origami.edges_foldAngle = ear.graph.make_edges_foldAngle(origami);
-  origami.populate();
-  origami["faces_re:layer"] = [];
-  // what the algorithm thinks is face 0-4 is actually origami.vertices_faces[vertex];
+  cp.edges_foldAngle = ear.graph.make_edges_foldAngle(cp);
+  cp.populate();
+  cp["faces_re:layer"] = [];
+  // what the algorithm thinks is face 0-4 is actually cp.vertices_faces[vertex];
   // i is face 0-4 (needs to be updated)
   res[0].layer[0].forEach((layer, i) => {
-    origami["faces_re:layer"][origami.vertices_faces[vertex][i]] = layer;
+    cp["faces_re:layer"][cp.vertices_faces[vertex][i]] = layer;
   });
-  // copy origami, fold the vertices, translate to center it on the right side
-	const folded = ear.origami(origami).folded();
+
+  // convert the cp into an origami object, a foldable graph. fold it.
+	const folded = ear.origami(cp).folded();
   const center = ear.math.average(...folded.vertices_coords);
   ear.graph.translate(folded, 2 - center[0], 0.5 - center[1]);
 
-  graphLayer.removeChildren();
-	const draw1 = graphLayer.graph(origami)
-	draw1.edges.mountain.stroke("black");
-	draw1.edges.valley.stroke("black").strokeDasharray("0.025 0.015");
+  svg.removeChildren();
+	const cpDraw = svg.graph(cp);
+	cpDraw.edges.mountain.stroke("black");
+	cpDraw.edges.valley.stroke("black").strokeDasharray("0.025 0.015");
 
-	const foldedDraw = graphLayer.graph(folded);
-	foldedDraw.edges.remove();
-	foldedDraw.faces.stroke("black");
-	foldedDraw.faces.back.forEach(f => f.fill("white"));
-	foldedDraw.faces.front.forEach(f => f.fill("#fb4"));
+	const style = { faces: { front: { fill: "#fb4" }}};
+	const foldedDraw = svg.graph(folded, style);
 
 	if (callback) {
 		callback({ sectors });

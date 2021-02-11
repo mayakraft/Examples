@@ -26,7 +26,7 @@ const rebuildCreases = (p, i, points) => {
     .map(vecs => ear.math.clockwise_bisect2(...vecs));
   const poly_rays = polygon.map((p, i) => ear.ray(poly_bisects[i], p));
 
-  const bisect_edges = poly_rays.map(ray => boundary.clipRay(ray));
+  const bisect_edges = poly_rays.map(ray => boundary.clip(ray));
   bisect_edges.forEach(seg => creaseLayer.line(seg[0], seg[1]).stroke("#e53").strokeWidth(STROKE_WIDTH));
 
   const junctions = poly_point_vectors.map((vec, i) => [vec[0], vec[1], poly_bisects[i]])
@@ -36,7 +36,7 @@ const rebuildCreases = (p, i, points) => {
     .map((three,i) => three.map(vec => ear.ray(vec, polygon[i])))
   const kawasaki_edges = kawasakiRays
     .map(vec => vec.filter((_,i) => i === 1).shift())
-    .map(r => boundary.clipRay(r));
+    .map(r => boundary.clip(r));
   kawasaki_edges.map(e => creaseLayer.line(e[0], e[1])
     .stroke("#158")
     .strokeWidth(STROKE_WIDTH)

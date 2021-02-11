@@ -29,7 +29,7 @@ const pointsToAxiomParams = (points) => ({
 const makeParamLines = params => params.lines === undefined
 	? []
 	: params.lines
-    .map(line => boundary.clipLine(line))
+    .map(line => boundary.clip(line))
     .filter(a => a !== undefined)
     .map(seg => ear.svg.line(seg[0], seg[1]));
 
@@ -43,7 +43,7 @@ const onChange = (point, i, points) => {
   if (result === undefined) { return; }
   if (result.constructor !== Array) { result = [result]; }
   result
-    .map(line => boundary.clipLine(line))
+    .map(line => boundary.clip(line))
     .filter(a => a !== undefined)
     .forEach(seg => resultLayer.line(seg[0], seg[1]));
 	if (callback) {

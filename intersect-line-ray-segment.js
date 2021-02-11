@@ -24,8 +24,8 @@ const redraw = function (p, i, points) {
     [points[(i * 2) + 0].x, points[(i * 2) + 0].y],
     [points[(i * 2) + 1].x, points[(i * 2) + 1].y]
   ]);
-  segments[0] = boundary.clipLine(line).points;
-  segments[1] = boundary.clipRay(ray).points;
+  segments[0] = boundary.clip(line);
+  segments[1] = boundary.clip(ray);
   segments.forEach((segment, i) => segment.forEach((p, j) => {
     lines[i].setAttribute(`x${j + 1}`, p[0]);
     lines[i].setAttribute(`y${j + 1}`, p[1]);
@@ -75,3 +75,4 @@ svg.controls(6)
     Math.random() * svg.getHeight() * 0.8 + svg.getHeight() * 0.1
   ])
   .onChange(redraw, true);
+

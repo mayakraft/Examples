@@ -1,34 +1,5 @@
 var callback;
 
-const origamiStyle = {
-  attributes: {
-    boundaries: {
-      stroke: "black",
-      "stroke-width": 0.01,
-    },
-    edges: { 
-      "stroke-width": 0.01,
-      valley: {
-        stroke: "#158",
-        "stroke-width": 0.015,
-        "stroke-dasharray": "0.02 0.03",
-        "stroke-linecap": "round"
-      }
-    }
-  }
-};
-
-const foldedStyle = {
-  edges: false,
-  attributes: {
-    faces: {
-      "stroke-width": 0.01,
-      front: { stroke: "black", fill: "white" },
-      back: { stroke: "black", fill: "#fb4" }
-    }
-  }
-};
-
 svg.size(1, 1).strokeWidth(0.02);
 const resultLayer = svg.g()
 const controlLayer = svg.g()
@@ -66,7 +37,7 @@ const arrowPolygon = arrowhead.polygon(0, 0, 0, 1, Math.sqrt(3)/2, 0.5)
 const makeParamLines = params => params.lines === undefined
 	? []
 	: params.lines
-    .map(line => boundary.clipLine(line))
+    .map(line => boundary.clip(line))
     .filter(a => a !== undefined)
     .map(seg => ear.svg.line(seg[0], seg[1]));
 
@@ -80,30 +51,27 @@ const onChange = (point, i, points) => {
   let result = ear.axiom(axiom, params);
 	const tests = ear.axiom.test(axiom, params, ear.graph.square());
   // result
-  //   .map(line => boundary.clipLine(line))
+  //   .map(line => boundary.clip(line))
   //   .filter(a => a !== undefined)
   //   .forEach(seg => resultLayer.line(seg[0], seg[1]));
 
-	const color = tests[axiomSolutionIndex % tests.length]
-		? "black"
-		: "#e53";
-	origamiStyle.attributes.boundaries.stroke = color;
-	origamiStyle.attributes.edges.valley.stroke = tests[axiomSolutionIndex % tests.length]
-		? "#158"
-		: "#e53";
+	const isValid = tests[axiomSolutionIndex % tests.length];
+	const color = isValid ? "black" : "#e53";
+	const options = isValid
+		? {}
+		: ({ boundaries: { stroke: "#e53" }, edges: { stroke: "#e53" } });
 	arrowPolygon.fill(color);
 
   const foldLine = result.splice(axiomSolutionIndex, 1).shift();
 	if (foldLine === undefined) {
 		// axiom is not constructible
-		resultLayer.graph(ear.graph.square());
-  	// resultLayer.load( ear.svg(ear.graph.square(), origamiStyle) );
+		resultLayer.graph(ear.graph.square(), options);
 		return;
 	}
 
   const origami = ear.graph.flat_fold(ear.graph.square(), foldLine.vector, foldLine.origin);
   result
-    // .forEach(line => origami.boundaries[0].clipLine(line)
+    // .forEach(line => origami.boundaries[0].clip(line)
     .map(line => ear.graph.clip_line(origami, line))
     .filter(a => a !== undefined)
     .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
@@ -120,9 +88,10 @@ const onChange = (point, i, points) => {
 		.markerEnd(arrowhead));
   const folded = JSON.parse(JSON.stringify(origami));
   folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
+	folded.frame_classes = ["foldedForm"];
   ear.graph.translate(folded, 1.5, 0);
 
-	const cpDraw = resultLayer.graph(origami);
+	const cpDraw = resultLayer.graph(origami, options);
 	const foldDraw = foldedLayer.graph(folded);
 	
 	svg.size(2.5, 1).padding(0.1);

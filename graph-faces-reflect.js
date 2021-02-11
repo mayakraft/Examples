@@ -9,15 +9,16 @@ const graph = {
 svg.size(0, -0.5, 5, 2)
 	.strokeWidth(1/100);
 
+// draw crease pattern
 svg.graph(graph);
 
-graph.file_classes = ["foldedForm"];
+// fold crease pattern
 const vertices_coords = ear.graph.make_vertices_coords_folded(graph);
 const translated = ear.graph.translate({ ...graph, vertices_coords }, 3.5, 0);
 
-const faces = ear.graph.svg.faces(translated).appendTo(svg);
-faces.fill("lightgray");
-faces.stroke("black");
-faces.front.fill("#fb4");
-faces.back.fill("white");
+// this key tells the renderer to style as if folded instead of a crease pattern
+translated.file_classes = ["foldedForm"];
+
+// draw folded
+svg.graph(translated);
 

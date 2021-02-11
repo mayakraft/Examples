@@ -12,10 +12,7 @@ const hull2 = ear.math.convex_hull(Array.from(Array(20))
 const polygon1 = ear.polygon(hull1);
 const polygon2 = ear.polygon(hull2);
 
-const backLine = svg.line().stroke(colors[0]).strokeDasharray("0.0001 0.075");
-const backRay = svg.line().stroke(colors[1]).strokeDasharray("0.0001 0.075");
-const backSegment = svg.line().stroke(colors[2]).strokeDasharray("0.0001 0.075");
-
+const backLines = colors.map(c => svg.line().stroke(c).strokeDasharray("0.0001 0.075"));
 polygon1.svg().appendTo(svg).fill("white").stroke("black");
 polygon2.svg().appendTo(svg).fill("white").stroke("black");
 
@@ -26,31 +23,25 @@ svg.controls(6)
   .position(() => [2 * Math.random(), Math.random()])
   .onChange((p, i, points) => {
     layer.removeChildren();
-		const line = ear.line.fromPoints(points[0], points[1]);
-		const ray = ear.ray.fromPoints(points[2], points[3]);
-		const segment = ear.segment(points[4], points[5]);
+    const lines = [
+		  ear.line.fromPoints(points[0], points[1]),
+		  ear.ray.fromPoints(points[2], points[3]),
+		  ear.segment(points[4], points[5])
+    ];
 		// draw the background dotted lines
 		const boundary = ear.rect(1, 1).scale(20);
-		const backLinePts = boundary.clipLine(line);
-		const backRayPts = boundary.clipRay(ray);
-		const backSegmentPts = boundary.clipSegment(segment);
-		if (backLinePts) {
-			backLine.setPoints(backLinePts[0], backLinePts[1])
-		}
-		if (backRayPts) {
-			backRay.setPoints(backRayPts[0], backRayPts[1])
-		}
-		if (backSegmentPts) {
-			backSegment.setPoints(backSegmentPts[0], backSegmentPts[1])
-		}
+    lines.forEach((el, i) => {
+      const seg = boundary.clip(el);
+      if (!seg) { return; }
+      backLines[i].setPoints(...seg);
+    });
 		// draw the clipped lines / rays / segments
 		[polygon1, polygon2].forEach(polygon => {
-			const clipLine = polygon.clipLine(line);
-			const clipRay = polygon.clipRay(ray);
-			const clipSegment = polygon.clipSegment(segment);
-			if (clipLine) { layer.line(clipLine[0], clipLine[1]).stroke(colors[0]); }
-			if (clipRay) { layer.line(clipRay[0], clipRay[1]).stroke(colors[1]); }
-			if (clipSegment) { layer.line(clipSegment[0], clipSegment[1]).stroke(colors[2]); }
+      lines.forEach((el, i) => {
+        const seg = polygon.clip(el);
+        if (!seg) { return; }
+        layer.line(...seg).stroke(colors[i]);
+      })
 		});
 	}, true);
 

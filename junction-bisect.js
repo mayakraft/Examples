@@ -1,5 +1,7 @@
 svg.size(-250, -250, 500, 500);
 
+const color = "black";
+// const color = "#999";
 const colors = ["#fb4", "#158", "#e53"];
 
 const vmin = (svg.getWidth() > svg.getHeight()
@@ -26,10 +28,10 @@ const onChange = function (point, i, points) {
   bisections
     .map(ear.math.normalize)
     .map(v => ear.math.scale(v, r2))
-    .map(p => svg.circle(p[0], p[1], 10).fill("#000"));
+    .map(p => svg.circle(p[0], p[1], 10).fill(color));
   // black lines
   points.map(c => svg.line(0, 0, c[0], c[1])
-    .stroke("black")
+    .stroke(color)
     .strokeWidth(6)
     .strokeLinecap("round"));
 };

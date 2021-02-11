@@ -30,14 +30,11 @@ const redraw = (p, i, points) => {
   arrowLayer.removeChildren();
   const lines = [0, 1]
     .map(i => ear.line.fromPoints(points[i * 2], points[i * 2 + 1]));
-  lines.map(l => boundary.clipLine(l))
+  lines.map(l => boundary.clip(l))
     .forEach((s, i) => svgLines[i].setPoints(s[0], s[1]));
-  const bisect = ear.math.bisect_lines2(
-    lines[0].vector, lines[0].origin,
-    lines[1].vector, lines[1].origin,
-		0.01);
+  const bisect = lines[0].bisect(lines[1], 0.01);
   bisect
-		.map((l, i) => ({ s: boundary.clipLine(l), c: colors[i % 2] }))
+		.map((l, i) => ({ s: boundary.clip(l), c: colors[i % 2] }))
     .filter(el => el.s !== undefined)
     .map(el => lineLayer.line(el.s[0], el.s[1]).stroke(el.c));
 

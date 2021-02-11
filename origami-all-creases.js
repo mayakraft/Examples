@@ -36,7 +36,7 @@ const isUniqueLine = (line, array) => {
   return true;
 };
 
-const makeAxiom1 = () => {
+const makeAxiom1 = (limit = -1) => {
   const arr = [];
   for (let i = 0; i < points.length - 1; i += 1) {
     for (let j = i + 1; j < points.length; j += 1) {
@@ -46,11 +46,13 @@ const makeAxiom1 = () => {
         && isUniqueLine(line, nextLines)) {
         arr.push(line);
       }
+      limit--;
+      if (limit === 0) { return arr; }
     }
   }
   return arr;
 };
-const makeAxiom2 = () => {
+const makeAxiom2 = (limit = -1) => {
   const arr = [];
   for (let i = 0; i < points.length - 1; i += 1) {
     for (let j = i + 1; j < points.length; j += 1) {
@@ -60,11 +62,13 @@ const makeAxiom2 = () => {
         && isUniqueLine(line, nextLines)) {
         arr.push(line);
       }
+      limit--;
+      if (limit === 0) { return arr; }
     }
   }
   return arr;
 };
-const makeAxiom3 = () => {
+const makeAxiom3 = (limit = -1) => {
   const arr = [];
   for (let i = 0; i < lines.length - 1; i += 1) {
     for (let j = i + 1; j < lines.length; j += 1) {
@@ -81,11 +85,13 @@ const makeAxiom3 = () => {
         && isUniqueLine(res[1], nextLines)) {
         arr.push(res[1]);
       }
+      limit--;
+      if (limit === 0) { return arr; }
     }
   }
   return arr;
 };
-const makeAxiom4 = () => {
+const makeAxiom4 = (limit = -1) => {
   const arr = [];
   for (let i = 0; i < points.length; i += 1) {
     for (let j = 0; j < lines.length; j += 1) {
@@ -95,18 +101,19 @@ const makeAxiom4 = () => {
         && isUniqueLine(line, nextLines)) {
         arr.push(line);
       }
+      limit--;
+      if (limit === 0) { return arr; }
     }
   }
   return arr;
 };
 
-const makeAxiom5 = () => {
+const makeAxiom5 = (limit = -1) => {
   const arr = [];
   for (let i = 0; i < points.length; i += 1) {
     for (let j = 0; j < points.length; j += 1) {
       if (i === j) { continue; }
       for (let k = 0; k < lines.length; k += 1) {
-        console.log("ax 5", i, j, k);
         const res = ear.axiom(5, { lines: [lines[k]], points: [points[i], points[j]] });
         if (res[0] !== undefined
           && isUniqueLine(res[0], lines)
@@ -120,12 +127,37 @@ const makeAxiom5 = () => {
           && isUniqueLine(res[1], nextLines)) {
           arr.push(res[1]);
         }
+        limit--;
+        if (limit === 0) { return arr; }
       }
     }
   }
   return arr;
 };
-const makeAxiom7 = () => {
+const makeAxiom6 = (limit = -1) => {
+  const arr = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    for (let j = 0; j < lines.length; j += 1) {
+      if (i === j) { continue; }
+      for (let k = 0; k < points.length; k += 1) {
+        for (let l = 0; l < points.length; l += 1) {
+          if (k === l) { continue; }
+          const line = ear.axiom(6, { lines: [lines[i], lines[j]], points: [points[k], points[l]] });
+          if (line !== undefined
+            && isUniqueLine(line, lines)
+            && isUniqueLine(line, arr)
+            && isUniqueLine(line, nextLines)) {
+            arr.push(line);
+          }
+          limit--;
+          if (limit === 0) { return arr; }
+        }
+      }
+    }
+  }
+  return arr;
+};
+const makeAxiom7 = (limit = -1) => {
   const arr = [];
   for (let i = 0; i < lines.length; i += 1) {
     for (let j = 0; j < lines.length; j += 1) {
@@ -138,23 +170,25 @@ const makeAxiom7 = () => {
           && isUniqueLine(line, nextLines)) {
           arr.push(line);
         }
+        limit--;
+        if (limit === 0) { return arr; }
       }
     }
   }
   return arr;
 };
 
-
 for (var rank = 0; rank < 1; rank += 1) {
   nextLines = [];
   nextPoints = [];
   // make new creases
-  // nextLines.push(...makeAxiom1());
-  // nextLines.push(...makeAxiom2());
-  // nextLines.push(...makeAxiom3());
-  // nextLines.push(...makeAxiom4());
-  nextLines.push(...makeAxiom5());
-  // nextLines.push(...makeAxiom7());
+  // nextLines.push(...makeAxiom1(50));
+  // nextLines.push(...makeAxiom2(50));
+  // nextLines.push(...makeAxiom3(50));
+  // nextLines.push(...makeAxiom4(50));
+  nextLines.push(...makeAxiom5(50));
+  // nextLines.push(...makeAxiom6(50));
+  // nextLines.push(...makeAxiom7(50));
   nextLines = nextLines
     .filter(l => square.intersectLine(l) !== undefined);
   console.log("FINISHED", nextLines.length);

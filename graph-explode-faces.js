@@ -1,7 +1,8 @@
-svg.size(1, 1).padding(0.02)
+svg.size(1, 1)
+	.padding(0.02)
 	.strokeWidth(0.01);
 
-fetch("https://robbykraft.github.io/fold/crane.fold")
+fetch("https://rabbitear.org/fold/crane.fold")
 	.then(res => res.json())
 	.then(graph => {
 

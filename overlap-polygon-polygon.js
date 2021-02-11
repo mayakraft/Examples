@@ -20,7 +20,7 @@ svg.controls(20)
 		poly2.setPoints(hull2);
 		polyFill1.setPoints(hull1);
 		polyFill2.setPoints(hull2);
-		const overlap = ear.math.overlap_convex_polygons_inclusive(hull1, hull2);
+		const overlap = ear.math.overlap_convex_polygons(hull1, hull2);
 		polyFill1.fill(overlap ? "#e53" : "#158");
 		polyFill2.fill(overlap ? "#e53" : "#158");
   }, true);

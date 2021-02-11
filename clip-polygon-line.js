@@ -25,11 +25,11 @@ svg.controls(2)
   .onChange((p, i, points) => {
     layer.removeChildren();
 		const line = ear.line.fromPoints(...points);
-		const backSeg = ear.rect(1, 1).scale(20).clipLine(line);
+		const backSeg = ear.rect(1, 1).scale(20).clip(line);
 		if (backSeg) {
 			backLine.setPoints(backSeg[0], backSeg[1])
 		}
-		const segment = polygon.clipLine(line);
+		const segment = polygon.clip(line);
 		if (segment) {
 			layer.line(segment[0], segment[1]).stroke("#fb4");
   	}

@@ -2,7 +2,7 @@ svg.size(2, 1)
 	.padding(0.05)
 	.strokeWidth(0.01);
 
-fetch("https://robbykraft.github.io/fold/crane.fold")
+fetch("https://rabbitear.org/fold/crane.fold")
 	.then(res => res.json())
 	.then(graph => {
 		const cp1 = svg.graph(graph);

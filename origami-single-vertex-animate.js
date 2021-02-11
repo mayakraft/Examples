@@ -64,24 +64,19 @@ const update = (point) => {
     origami["faces_re:layer"][origami.vertices_faces[vertex][i]] = layer;
   });
   // copy origami, fold the vertices, translate it to the right a little
-  const folded = origami.copy();
-  folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
+	const folded = ear.origami(origami).folded();
   // const center = ear.rect(ear.math.enclosing_rectangle(folded.vertices_coords)).centroid();
   const center = ear.math.average(...folded.vertices_coords);
   ear.graph.translate(folded, 1.75 - center[0], 0.5 - center[1]);
 
   graphLayer.removeChildren();
-  // graphLayer.load(ear.svg(origami, style));
-  // graphLayer.load(ear.svg(folded, foldedStyle));
 	const flat = graphLayer.graph(origami);
 	flat.edges.mountain.stroke("black");
 	flat.edges.valley.stroke("black").strokeDasharray("0.025 0.015");
-	const foldedDraw = graphLayer.graph(folded);
-	foldedDraw.edges.remove();
-	foldedDraw.faces.stroke("black");
-	foldedDraw.faces.back.forEach(f => f.fill("white"));
-	foldedDraw.faces.front.forEach(f => f.fill("#fb4"));
+	const style = { faces: { front: { fill: "#fb4" }}};
+	const foldedDraw = graphLayer.graph(folded, style);
 };
+
 
 let releaseTimeout;
 
