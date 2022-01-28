@@ -3,12 +3,12 @@ svg.size(1, 1)
 	.strokeWidth(0.01);
 
 const graph = ear.graph.kite();
-svg.graph(graph);
+svg.origami(graph);
 
 const splitGraph = (g, edge, pos) => {
   ear.graph.split_edge(g, edge, [pos[0], pos[1]]);
   svg.removeChildren();
-	svg.graph(g);
+	svg.origami(g);
 };
 
 svg.onPress = (event) => {

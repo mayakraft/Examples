@@ -19,19 +19,24 @@ const reset = () => {
     graph.edges_vertices.push([i * 2, i * 2 + 1]);
   }
 
+  // make into a planar graph
   ear.graph.fragment(graph);
+
+  // build the faces
   ear.graph.populate(graph);
-	svg.removeChildren();
-	const drawing = svg.graph(graph);
-	drawing.vertices.stroke("#e53").fill("white")
-		.childNodes.forEach(vert => vert.setRadius(0.0075));
-	drawing.edges.stroke("#e53");
+
+  // draw
+  svg.removeChildren();
+  const drawing = svg.origami(graph, false);
+  drawing.vertices.stroke("#e53").fill("white")
+    .childNodes.forEach(vert => vert.setRadius(0.0075));
+  drawing.edges.stroke("#e53");
 
   layer.removeChildren();
   svg.appendChild(layer);
 
   drawing.faces.childNodes.forEach((face, i, arr) => face.fill(`#fed`));
-	faces = drawing.faces.childNodes;
+  faces = drawing.faces.childNodes;
 };
 
 reset();
@@ -58,4 +63,3 @@ if (slider) {
 }
 
 svg.onPress = reset;
-

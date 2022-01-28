@@ -1,5 +1,6 @@
 var pleats = 16;
 
+const cp = ear.cp();
 cp.pleat(pleats, cp.edges[0], cp.edges[1]);
 
 // the origins of each ray

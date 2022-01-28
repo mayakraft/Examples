@@ -30,7 +30,7 @@ const onChange = (p, i, points) => {
     .map(v => Math.atan2(v[1], v[0]))
     .sort((a, b) => a - b);
 
-  solutions = ear.single.kawasaki_solutions_radians(radians)
+  solutions = ear.vertex.kawasaki_solutions_radians(radians)
     .filter(s => s !== undefined)
     .map(angle => [Math.cos(angle), Math.sin(angle)])
     .map(vec => layer.line(0, 0, ...vec).stroke("#e53"));

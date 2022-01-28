@@ -18,10 +18,12 @@ const reset = () => {
     graph.edges_vertices.push([i * 2, i * 2 + 1]);
   }
 
+  // make into a planar graph
   ear.graph.fragment(graph);
-  ear.graph.populate(graph);
+
+  // draw
 	svg.removeChildren();
-	let drawing = svg.graph(graph);
+	let drawing = svg.origami(graph, false);
 	drawing.vertices.fill("white").stroke("#e53");
 	drawing.vertices.childNodes.forEach(v => v.setRadius(0.0075));
 	drawing.edges.stroke("#e53");
@@ -51,4 +53,3 @@ if (slider) {
 }
 
 svg.onPress = reset;
-

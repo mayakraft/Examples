@@ -1,24 +1,18 @@
-const graph = {
-  vertices_coords: [[0,0], [1.2,0], [1.9,0], [3,0], [3,1], [2,1], [1,1], [0,1]],
-  edges_vertices: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [6,7], [7,0], [6,1], [5,2]],
-  edges_foldAngle: [0,0,0,0,0,0,0,0,180,-180],
-  edges_assignment: ["B","B","B","B","B","B","B","B","V","M"],
-  faces_vertices: [[1,0,7,6], [2,1,6,5], [3,2,5,4]]
-};
+svg.size(0, -0.5, 5, 2);
 
-svg.size(0, -0.5, 5, 2)
-	.strokeWidth(1/100);
+const origami = ear.cp.rectangle(3,1);
+origami.line([Math.random()-0.5, 1], [1, 0.5]).valley();
+origami.line([Math.random()-0.5, 1], [2, 0.5]).mountain();
 
 // draw crease pattern
-svg.graph(graph);
+svg.origami(origami);
 
-// fold crease pattern
-const vertices_coords = ear.graph.make_vertices_coords_folded(graph);
-const translated = ear.graph.translate({ ...graph, vertices_coords }, 3.5, 0);
+// fold the origami
+const folded = origami.flatFolded();
 
-// this key tells the renderer to style as if folded instead of a crease pattern
-translated.file_classes = ["foldedForm"];
+// solve the layer order (it's always the same. [0,2,1])
+folded.faces_layer = ear.layer
+  .make_faces_layers(folded)[0];
 
-// draw folded
-svg.graph(translated);
-
+// draw a folded copy of the origami
+svg.origami(folded).translate(3.5, -0.25);

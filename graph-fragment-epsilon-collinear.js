@@ -4,22 +4,22 @@ const graph = {};
 const NUM_EDGES = 6;
 
 svg.size(0, 0.45, 1, 0.5)
-	.stroke("black")
-	.strokeWidth(0.005);
+  .stroke("black")
+  .strokeWidth(0.005);
 
 const update = (epsilon) => {
   const frag = JSON.parse(JSON.stringify(graph));
   ear.graph.fragment(frag, epsilon);
 
   svg.removeChildren();
-	frag.vertices_coords.map(vert => svg
-		.circle(...vert, epsilon)
-		.fill("#e53")
-		.stroke("none"));
-	const drawing = svg.graph(frag);
-	drawing.vertices.stroke("black").fill("white").childNodes
-		.forEach(vert => vert.setRadius(0.0075));
-	drawing.edges.stroke("black");
+  frag.vertices_coords.map(vert => svg
+    .circle(...vert, epsilon)
+    .fill("#e53")
+    .stroke("none"));
+  const drawing = svg.origami(frag, false);
+  drawing.vertices.stroke("black").fill("white").childNodes
+    .forEach(vert => vert.setRadius(0.0075));
+  drawing.edges.stroke("black");
 };
 
 const makeNewGraph = () => {
@@ -29,7 +29,8 @@ const makeNewGraph = () => {
   for (let i = 0; i < NUM_EDGES; i += 1) {
     const pct = i / (NUM_EDGES-1);
     graph.vertices_coords.push(
-      [0.15 + 0.7 * pct, 0.51 + 0.05*pct], [0.15 + 0.7 * pct, 0.9]
+      [0.15 + 0.7 * pct, 0.51 + 0.05*pct],
+      [0.15 + 0.7 * pct, 0.9]
     );
     graph.edges_vertices.push([i * 2 + 2, i * 2 + 3]);
   }
@@ -46,7 +47,9 @@ if (slider) {
     const epsilon = Math.pow(10, places);
     update(epsilon);
     if (countLabel) {
-      const epsilonString = epsilon.toFixed(places < 0 ? -places + 1 : 0);    
+      const epsilonString = epsilon.toFixed(places < 0
+        ? -places + 1
+        : 0);    
       countLabel.innerHTML = `epsilon ${epsilonString}`;
     }
   };

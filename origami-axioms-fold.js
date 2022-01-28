@@ -24,96 +24,91 @@ const pointsToAxiomParams = (points) => ({
 		.map((_, i) => ear.line.fromPoints(points[i*2+0], points[i*2+1]))
 });
 
-const arrowhead = svg.marker()
-	.orient("auto-start-reverse")
-	.refY(0.5)
-	.markerWidth(4)
-	.markerHeight(4)
-	.setViewBox(0, 0, 1, 1);
-const arrowPolygon = arrowhead.polygon(0, 0, 0, 1, Math.sqrt(3)/2, 0.5)
-	.fill("black")
-	.stroke("none");
-
 const makeParamLines = params => params.lines === undefined
 	? []
 	: params.lines
-    .map(line => boundary.clip(line))
-    .filter(a => a !== undefined)
-    .map(seg => ear.svg.line(seg[0], seg[1]));
+		.map(line => boundary.clip(line))
+		.filter(a => a !== undefined)
+		.map(seg => ear.svg.line(seg[0], seg[1]));
 
 const onChange = (point, i, points) => {
 	const params = pointsToAxiomParams(points);
-  marksLayer.removeChildren();
+	marksLayer.removeChildren();
 	resultLayer.removeChildren();
 	foldedLayer.removeChildren();
-  makeParamLines(params)
+	makeParamLines(params)
 		.forEach(line => marksLayer.appendChild(line));
-  let result = ear.axiom(axiom, params);
-	const tests = ear.axiom.test(axiom, params, ear.graph.square());
-  // result
-  //   .map(line => boundary.clip(line))
-  //   .filter(a => a !== undefined)
-  //   .forEach(seg => resultLayer.line(seg[0], seg[1]));
+	// the simple approach. this runs the test for you.
+	// const solutions = ear.axiom(axiom, params, boundary);
 
-	const isValid = tests[axiomSolutionIndex % tests.length];
+	// the longer approach. manually filter. we need this data for visualization
+	const solutions = ear.axiom(axiom, params);
+	// console.log("solutions", solutions);
+	const valid = ear.axiom.validate(axiom, params, boundary);
+	// console.log("valid", valid);
+	const isValid = valid[axiomSolutionIndex % valid.length];
+	// console.log("isValid", isValid);
+
+	// color components if it passes or fails the validation
 	const color = isValid ? "black" : "#e53";
 	const options = isValid
 		? {}
 		: ({ boundaries: { stroke: "#e53" }, edges: { stroke: "#e53" } });
-	arrowPolygon.fill(color);
 
-  const foldLine = result.splice(axiomSolutionIndex, 1).shift();
+	const foldLine = solutions.splice(axiomSolutionIndex, 1).shift();
 	if (foldLine === undefined) {
 		// axiom is not constructible
-		resultLayer.graph(ear.graph.square(), options);
+		resultLayer.origami(ear.graph.square(), options);
 		return;
 	}
+	const origami = ear.origami().flatFold(foldLine);
 
-  const origami = ear.graph.flat_fold(ear.graph.square(), foldLine.vector, foldLine.origin);
-  result
-    // .forEach(line => origami.boundaries[0].clip(line)
-    .map(line => ear.graph.clip_line(origami, line))
-    .filter(a => a !== undefined)
-    .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
-      .strokeWidth(0.01)
-      .stroke(color)
-      .opacity(0.1));
-	let axiomArrows = ear.diagram.axiom_arrows(axiom, params, origami);
-  if (axiomArrows[0].constructor !== Array) { axiomArrows = [axiomArrows]; }
-  const arrows = axiomArrows.splice(axiomSolutionIndex, 1).shift();
-	arrows.forEach(seg => marksLayer.curve(seg[0], seg[1], 0.3)
-		.stroke(color)
+	solutions
+		.map(line => ear.graph.clip(origami, line))
+		.filter(a => a !== undefined)
+		.forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
+			.strokeWidth(0.01)
+			.stroke(color)
+			.opacity(0.1));
+
+	const arrow = ear.diagram.simple_arrow(origami, foldLine);
+	if (arrow === undefined) {
+		resultLayer.origami(ear.graph.square(), options);
+		return;
+	}
+	// console.log("6 error here", origami, foldLine);
+	marksLayer.arrow(arrow)
+		.fill(color)
+		.stroke("none")
+		.getLine()
 		.fill("none")
 		.strokeWidth(0.02)
-		.markerEnd(arrowhead));
-  const folded = JSON.parse(JSON.stringify(origami));
-  folded.vertices_coords = ear.graph.make_vertices_coords_folded(folded);
-	folded.frame_classes = ["foldedForm"];
-  ear.graph.translate(folded, 1.5, 0);
+		.stroke(color);
 
-	const cpDraw = resultLayer.graph(origami, options);
-	const foldDraw = foldedLayer.graph(folded);
+	const cpDraw = resultLayer.origami(origami, options);
+	const foldDraw = foldedLayer.origami(origami.folded())
+		.translate(1.5, 0);
 	
 	svg.size(2.5, 1).padding(0.1);
 
 	if (callback) {
-		callback({ params, result });
+		callback({ params, solutions });
 	}
 };
 
 const reset = () => {
-  controlLayer.removeChildren();
-  controls.removeAll();
-  controls = svg.controls(axiomControlCount[axiom])
-    .svg(() => controlLayer.circle(0.04))
-    .position(() => [Math.random(), Math.random()])
-    .onChange(onChange, true);
+	controlLayer.removeChildren();
+	controls.removeAll();
+	controls = svg.controls(axiomControlCount[axiom])
+		.svg(() => controlLayer.circle(0.04))
+		.position(() => [Math.random(), Math.random()])
+		.onChange(onChange, true);
 };
 
 const setAxiom = (i) => {
-  axiom = i;
-  axiomSolutionIndex = 0;
-  reset();
+	axiom = i;
+	axiomSolutionIndex = 0;
+	reset();
 };
 
 svg.onRelease = function (mouse) {
@@ -129,4 +124,3 @@ svg.onRelease = function (mouse) {
 };
 
 setAxiom(2);
-

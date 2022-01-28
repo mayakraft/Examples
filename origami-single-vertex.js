@@ -1,80 +1,57 @@
-var callback;
-
 svg.size(2.5, 1)
-	.padding(0.1)
+  .padding(0.1)
   .strokeWidth(0.01);
 
-// create a base with 3 creases to 3 corners
-// the fourth will be calculated using Kawasaki's theorem
+const style = {
+  edges: {
+    mountain: { stroke: "black" },
+    valley: { stroke: "black", "stroke-dasharray": "0.025 0.015" }},
+  faces: { front: { fill: "white" }, back: { fill: "#fb4"}}
+};
+
+// starting from a blank square,
+// make 3 creases from the center to 3 corners.
+// the fourth will be calculated using Kawasaki's theorem.
 const base = ear.cp.square();
 base.segment([0.5, 0.5], [0, 0]);
 base.segment([0.5, 0.5], [1, 0]);
 base.segment([0.5, 0.5], [1, 1]);
 
-// get the indices of the center vertex and the 3 creases
+// get the indices of the center vertex
 const vertex = base.nearest(0.5, 0.5).vertex;
-const edges3 = base.vertices_edges[vertex];
-
-// keep the point inside the unit square
-const limitPoint = (point, ep = ear.math.EPSILON) => {
-  if (point.x < ep) { point.x = ep; }
-  if (point.y < ep) { point.y = ep; }
-  if (point.x > 1 - ep) { point.x = 1 - ep; }
-  if (point.y > 1 - ep) { point.y = 1 - ep; }
-  return point;
-};
 
 const update = (point) => {
-  point = limitPoint(point);
-	const cp = base.copy();
+  // to prevent confusion, clicking on folded form won't do anything.
+  if (point.x > 1) { return; }
+  // make sure point is inside the unit square.
+  point = ({
+    x: Math.max(Math.min(point.x, 1 - 1e-6), 1e-6),
+    y: Math.max(Math.min(point.y, 1 - 1e-6), 1e-6),
+  })
+
+  // clone the cp from the base (3 creases)
+  // set the center vertex to the point from the touch handler.
+  const cp = base.copy();
   cp.vertices_coords[vertex] = [point.x, point.y];
-  // this gives us edges_vector, we need it for the kawasaki calculation
-  cp.populate();
-  // make a junction to sort the edges counter-clockwise
-	const edges_vectors = edges3.map(i => cp.edges_vector[i]);
-	const sortedVectors = ear.math.counter_clockwise_order2(edges_vectors)
-		.map(i => edges_vectors[i]);
-  // this returns solutions for 3 sectors. the large sector is at index 0
-  const solution = ear.single.kawasaki_solutions(sortedVectors)[0];
+
+  // using the angles between the 3 existing crease, this
+  // will generate a fourth crease that satisfies Kawasaki.
+  const solution = ear.vertex.kawasaki_solutions(cp, vertex);
   if (!solution) { return; }
   cp.ray(solution, cp.vertices_coords[vertex]);
 
-	// single vertex layer order calculation
-	// todo: this should become wrapped up in one big "fold" operation.
-  const sectors = cp.vertices_sectors[vertex];
-  const assignments = cp.vertices_edges[vertex]
-    .map(edge => cp.edges_assignment[edge]);
-  const res = ear.single.layer_solver(sectors, assignments);
-  if (!res.length) { return; }
-  // there will be only one solution, but all we need is one anyway
-  res[0].assignment.forEach((a, i) => {
-    cp.edges_assignment[ cp.vertices_edges[vertex][i] ] = a;
-  });
-  cp.edges_foldAngle = ear.graph.make_edges_foldAngle(cp);
-  cp.populate();
-  cp["faces_re:layer"] = [];
-  // what the algorithm thinks is face 0-4 is actually cp.vertices_faces[vertex];
-  // i is face 0-4 (needs to be updated)
-  res[0].layer[0].forEach((layer, i) => {
-    cp["faces_re:layer"][cp.vertices_faces[vertex][i]] = layer;
-  });
+  // fold the crease pattern
+  const folded = cp.flatFolded();
 
-  // convert the cp into an origami object, a foldable graph. fold it.
-	const folded = ear.origami(cp).folded();
-  const center = ear.math.average(...folded.vertices_coords);
-  ear.graph.translate(folded, 2 - center[0], 0.5 - center[1]);
+  // solve layer order
+  const faces_layer = ear.layer.make_faces_layers(folded)[3];
+  cp.edges_assignment = ear.layer.faces_layer_to_edges_assignments(folded, faces_layer);
+  folded.faces_layer = faces_layer;
 
+  // draw things
   svg.removeChildren();
-	const cpDraw = svg.graph(cp);
-	cpDraw.edges.mountain.stroke("black");
-	cpDraw.edges.valley.stroke("black").strokeDasharray("0.025 0.015");
-
-	const style = { faces: { front: { fill: "#fb4" }}};
-	const foldedDraw = svg.graph(folded, style);
-
-	if (callback) {
-		callback({ sectors });
-	}
+  svg.origami(cp, style);
+  svg.origami(folded, style).translate(1.2, 0);
 };
 
 svg.onPress = update;
@@ -86,6 +63,5 @@ svg.onMove = (event) => {
 };
 
 update(ear.vector(Math.random(), Math.random())
-	.scale(0.2)
-	.add([0.4, 0.4]));
-
+  .scale(0.2)
+  .add([0.4, 0.4]));

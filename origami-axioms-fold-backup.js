@@ -57,7 +57,7 @@ const drawParams = function (params) {
   marksLayer.removeChildren();
   if (!params.lines) { return; }
   params.lines
-    .map(line => ear.graph.clip_line(origami, line))
+    .map(line => ear.graph.clip(origami, line))
     .filter(a => a !== undefined)
     .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
       .strokeWidth(0.01)
@@ -108,7 +108,7 @@ const controlsOnChange = function (point, i, points) {
 
   result
     // .forEach(line => origami.boundaries[0].clipLine(line)
-    .map(line => ear.graph.clip_line(origami, line))
+    .map(line => ear.graph.clip(origami, line))
     .filter(a => a !== undefined)
     .forEach(s => marksLayer.line(s[0][0], s[0][1], s[1][0], s[1][1])
       .strokeWidth(0.01)

@@ -56,8 +56,8 @@ const lines = [
   ear.ray.fromPoints,
 ].map((f, i) => f(segments[i]));
 
-const svgLines = ["clipRay", "clipRay"]
-  .map((key, i) => boundary[key](lines[i]))
+const svgLines = lines
+  .map(line => boundary.clip(line))
   .map((seg, i) => top.line(seg[0], seg[1]).stroke(colors[i]).strokeWidth(radius/2));
 
 const svgPoints = segments.map((seg, i) => [

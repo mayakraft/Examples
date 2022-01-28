@@ -24,8 +24,6 @@ const graph = ear.graph({
   edges_assignment: ["B", "B", "B", "B", "B", "B", "V", "V", "M"],
 });
 
-graph.populate();
-
 svg.load(graph.svg());
 
 // console.log(graph)
@@ -42,7 +40,7 @@ const splitGraph = (graph, face, mouse) => {
   // svg.line(line.origin, line.origin.add(line.vector.scale(0.1)))
   //   .strokeWidth(0.005)
   //   .stroke("black");
-  graph.faces_matrix = ear.core.make_faces_matrix(graph, face);
+  graph.faces_matrix = ear.graph.make_faces_matrix(graph, face);
   const lines = graph.faces_matrix.map(matrix => line.transform(matrix));
   lines.forEach(line => svg.line(
       line.origin,
@@ -55,7 +53,7 @@ const splitGraph = (graph, face, mouse) => {
 
 svg.onPress = (event) => {
   const nearest = graph.nearest(event);
-  if (!nearest.face || nearest.face.index === undefined) { return; }
+  if (nearest.face === undefined) { return; }
   splitGraph(graph, nearest.face.index, event);
 };
 
@@ -63,7 +61,7 @@ svg.play = (event) => {
   angle += 0.05;
   if (!graph) { return; }
   const nearest = graph.nearest([mouseX, mouseY]);
-  if (!nearest.face || nearest.face.index === undefined) { return; }
+  if (nearest.face === undefined) { return; }
   const graphCopy = ear.graph( JSON.parse(JSON.stringify(graph)) );
   splitGraph(graphCopy, nearest.face.index, { x:mouseX, y:mouseY });
 };

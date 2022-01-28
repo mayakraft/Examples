@@ -9,7 +9,7 @@ let angle = 0.1;
 
 const redraw = (graph) => {
   svg.removeChildren();
-	svg.graph(graph);
+	svg.origami(graph);
   // draw exploded faces, shrink to make them more visible
   const exploded = ear.graph.explode_faces(graph);
   exploded.vertices_coords = exploded.faces_vertices.map(face => {

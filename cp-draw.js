@@ -1,19 +1,18 @@
 var callback;
 
 const cpStyle = {
-  boundaries: true,
-  attributes: {
-    boundaries: { stroke: "black" },
-    edges: {
-      "stroke-linecap": "round",
-      mountain: {
-        stroke: "#e53",
-      },
-      valley: {
-        stroke: "#158",
-        "stroke-dasharray": "0.02",
-      },
-    }
+  boundaries: { stroke: "black" },
+  edges: {
+    "stroke-linecap": "round",
+    // flat: { stroke: "none" },
+    mark: { stroke: "none" }, // todo this should be "flat"
+    mountain: {
+      stroke: "#e53",
+    },
+    valley: {
+      stroke: "#158",
+      "stroke-dasharray": "0.02",
+    },
   }
 };
 
@@ -48,16 +47,16 @@ let shape;
 let primitive;
 let count = 0;
 
-cpLayer.graph(cp);
+cpLayer.origami(cp, cpStyle);
 
 svg.onPress = (e) => {
-	if (count % 3 === 0) { 
-		cp = cpBase.copy();
-		cpLayer.removeChildren();
-		cpLayer.graph(cp);
-		// cpLayer.load(ear.svg(cp, cpStyle));
-	}
-	count++;
+  if (count % 3 === 0) { 
+    cp = cpBase.copy();
+    cpLayer.removeChildren();
+    cpLayer.origami(cp, cpStyle);
+    // cpLayer.load(ear.svg(cp, cpStyle));
+  }
+  count++;
   // cpLayer.load( ear.svg(cp, cpStyle) );
   shape = shapes[Math.floor(Math.random() * shapes.length)];
 };
@@ -82,12 +81,11 @@ svg.onRelease = (e) => {
   const res = cp[shape](primitive);
   if (count % 2) { res.mountain(); }
   else { res.valley(); }
-	cpLayer.removeChildren();
+  cpLayer.removeChildren();
   // cpLayer.load( ear.svg(cp, cpStyle) );
-	cpLayer.graph(cp);
-	// console.log(cp);
-	if (callback) {
+  cpLayer.origami(cp, cpStyle);
+  // console.log(cp);
+  if (callback) {
     callback({ cp: cp.copy() });
   }
 };
-

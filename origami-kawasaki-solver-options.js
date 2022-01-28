@@ -52,7 +52,7 @@ const onChange = (p, i, points) => {
     .forEach(r => layer.line(r.origin, r.origin.add(r.vector)).stroke("black"));
 
 	const vectors = ear.math.counter_clockwise_order2(points).map(i => points[i]);
-  const solutions = ear.single.kawasaki_solutions(vectors)
+  const solutions = ear.vertex.kawasaki_solutions_vectors(vectors)
   	.filter(s => s !== undefined);
   solutions.map(vec => layer.line(0, 0, ...vec).stroke("#e53"));
 	
@@ -75,4 +75,3 @@ const rebuildWithCreases = (count) => {
 };
 
 rebuildWithCreases(sliderCount);
-

@@ -26,9 +26,9 @@ const redraw = function (p, i, points) {
   ]);
   segments[0] = boundary.clip(line);
   segments[1] = boundary.clip(ray);
-  segments.forEach((segment, i) => segment.forEach((p, j) => {
-    lines[i].setAttribute(`x${j + 1}`, p[0]);
-    lines[i].setAttribute(`y${j + 1}`, p[1]);
+  segments.forEach((segment, i) => [0, 1].forEach((j) => {
+    lines[i].setAttribute(`x${j + 1}`, segment[j][0]);
+    lines[i].setAttribute(`y${j + 1}`, segment[j][1]);
   }));
 
   // intersection wedges
@@ -75,4 +75,3 @@ svg.controls(6)
     Math.random() * svg.getHeight() * 0.8 + svg.getHeight() * 0.1
   ])
   .onChange(redraw, true);
-

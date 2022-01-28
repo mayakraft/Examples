@@ -36,12 +36,11 @@ points.forEach((row, j) => {
 	});
 });
 
-
 ear.graph.get_planar_boundary(graph).edges.forEach(edge => {
 	graph.edges_assignment[edge] = "B";
 });
 
-const drawing = svg.graph(graph);
+const drawing = svg.origami(graph);
 drawing.boundaries.strokeWidth(0.015).strokeLinecap("round");
 drawing.edges.mountain.stroke("black");
 drawing.edges.valley.stroke("black").strokeDasharray("0.01");
@@ -49,4 +48,3 @@ drawing.edges.valley.stroke("black").strokeDasharray("0.01");
 svg.size(1.2, 1.2)
 	.padding(0.025)
 	.strokeWidth(0.01);
-

@@ -37,7 +37,7 @@ const update = (point) => {
 	const sortedVectors = ear.math.counter_clockwise_order2(edges_vectors)
 		.map(i => edges_vectors[i]);
   // this returns solutions for 3 sectors. the large sector is at index 2
-  const solution = ear.single.kawasaki_solutions(sortedVectors)[2];
+  const solution = ear.single.kawasaki_solutions_vectors(sortedVectors)[2];
   if (!solution) { return; }
 
 	origami.ray(solution, origami.vertices_coords[vertex]);
@@ -57,11 +57,11 @@ const update = (point) => {
   origami.edges_foldAngle = ear.graph.make_edges_foldAngle(origami);
   // there will be only one solution, but all we need is one anyway
   origami.populate();
-  origami["faces_re:layer"] = [];
+  origami.faces_layer = [];
   // what the algorithm thinks is face 0-4 is actually origami.vertices_faces[vertex];
   // i is face 0-4 (needs to be updated)
   res[0].layer[0].forEach((layer, i) => {
-    origami["faces_re:layer"][origami.vertices_faces[vertex][i]] = layer;
+    origami.faces_layer[origami.vertices_faces[vertex][i]] = layer;
   });
   // copy origami, fold the vertices, translate it to the right a little
 	const folded = ear.origami(origami).folded();

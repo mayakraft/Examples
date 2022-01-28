@@ -33,15 +33,14 @@ svg.controls(6)
     lines.forEach((el, i) => {
       const seg = boundary.clip(el);
       if (!seg) { return; }
-      backLines[i].setPoints(...seg);
+      backLines[i].setPoints(seg[0], seg[1]);
     });
 		// draw the clipped lines / rays / segments
 		[polygon1, polygon2].forEach(polygon => {
       lines.forEach((el, i) => {
         const seg = polygon.clip(el);
         if (!seg) { return; }
-        layer.line(...seg).stroke(colors[i]);
+        layer.line(seg[0], seg[1]).stroke(colors[i]);
       })
 		});
 	}, true);
-

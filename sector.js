@@ -3,10 +3,13 @@ svg.size(-250, -250, 500, 500);
 const NUM_LINES = 2;
 
 let colors = ["#158", "#fb4", "#e53"];
-const lines = Array.from(Array(NUM_LINES))
-  .map(() => svg.line().stroke("black").strokeWidth(5).strokeLinecap("round"));
 const wedges = Array.from(Array(NUM_LINES))
   .map((_, i) => svg.wedge().fill(colors[i % 3]));
+const lines = Array.from(Array(NUM_LINES))
+  .map(() => svg.line()
+    .stroke("black")
+    .strokeWidth(8)
+    .strokeLinecap("round"));
 
 const update = function (p, i, points) {
   let angles = points.map(el => Math.atan2(el[1], el[0]));
@@ -28,9 +31,11 @@ const update = function (p, i, points) {
 };
 
 svg.controls(NUM_LINES)
-  .svg(() => ear.svg.circle(10).fill("#e53"))
-  .position(() => [
-    (Math.random() - 0.5) * svg.getWidth(),
-    (Math.random() - 0.5) * svg.getHeight(),
-  ])
-  .onChange(update, true);
+  .position(() => [Math.cos, Math.sin]
+    .map(f => f(Math.random() * Math.PI * 2)))
+  .onChange(update, true)
+  .forEach((p) => {
+    p.updatePosition = (mouse) => [Math.cos, Math.sin]
+      .map(f => f(Math.atan2(mouse.y, mouse.x)));
+  });
+

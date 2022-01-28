@@ -27,7 +27,7 @@ svg.controls(1)
 
     const vectors = corners.map(corner => ear.math.subtract(corner, p));
     // get one kawasaki solution line
-    const kawasaki = ear.single.kawasaki_solutions(vectors)
+    const kawasaki = ear.vertex.kawasaki_solutions_vectors(vectors)
       .filter(a => a !== undefined)
       .pop();
     vectors.push(kawasaki);
@@ -37,7 +37,7 @@ svg.controls(1)
     endpoints.forEach((v, i) => creases[i].setPoints(v, p));
 
     const junction = ear.junction(vectors);
-    const results = ear.single
+    const results = ear.vertex
       .assignment_solver(junction.sectors, creases.map(() => "U"));
 
     window.junction = junction;

@@ -1,3 +1,5 @@
+var callback;
+
 svg.size(500, 500);
 
 const bottom = svg.g()

@@ -14,7 +14,7 @@ const update = (epsilon) => {
   ear.graph.populate(merged);
 
   svg.removeChildren();
-	const drawing = svg.graph(merged);
+	const drawing = svg.origami(merged);
 	drawing.vertices.fill("white").stroke("black").childNodes
 		.forEach(vert => vert.setRadius(0.005));
 	drawing.edges.stroke("black");

@@ -1,4 +1,6 @@
-svg.strokeWidth(1 / 100);
+svg.size(0, 0, 7, 2)
+  .padding(0.05)
+  .strokeWidth(0.01);
 
 const EDGES = 32;
 
@@ -9,30 +11,33 @@ graph.vertices_coords = Array.from(Array(EDGES * 2))
   .map(() => [Math.cos, Math.sin]
     .map(f => f(Math.PI*2 * Math.random())));
 
-const one = svg.graph(graph);
-one.vertices.fill("white");
-one.vertices.stroke("black");
-one.vertices.childNodes.forEach(vert => vert.setRadius(0.02));
+svg.origami(graph)
+  .vertices
+  .fill("white")
+  .stroke("black")
+  .childNodes
+  .forEach(vert => vert.setRadius(0.02));
 
-ear.graph.translate(graph, 2.5, 0);
+// make into a planar graph
 ear.graph.fragment(graph);
 
-const two = svg.graph(graph);
-two.vertices.fill("white");
-two.vertices.stroke("black");
-two.vertices.childNodes.forEach(vert => vert.setRadius(0.02));
+svg.origami(graph)
+  .translate(2.5, 0)
+  .vertices
+  .fill("white")
+  .stroke("black")
+  .childNodes.forEach(vert => vert.setRadius(0.02));
 
-ear.graph.translate(graph, 2.5, 0);
+// build faces
 ear.graph.populate(graph);
 
-const three = svg.graph(graph);
-three.vertices.fill("white");
-three.vertices.stroke("black");
-three.vertices.childNodes.forEach(vert => vert.setRadius(0.02));
+const three = svg.origami(graph);
+three.translate(5, 0)
+  .vertices.fill("white")
+  .stroke("black")
+  .childNodes
+  .forEach(vert => vert.setRadius(0.02));
 three.faces
-	.childNodes
-	.forEach((face, i, arr) => face.fill(`hsl(${i/arr.length*360}, 100%, 50%)`));
-
-svg.size(-1, -1, 7, 2)
-  .padding(0.05);
+  .childNodes
+  .forEach((face, i, arr) => face.fill(`hsl(${i/arr.length*360}, 100%, 50%)`));
 

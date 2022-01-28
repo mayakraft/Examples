@@ -78,8 +78,7 @@ svg.controls(5)
       ear.ray.fromPoints,
     ].map((f, i) => f(segments[i]));
 
-    const clips = ["clipRay", "clipRay"]
-      .map((key, i) => boundary[key](lines[i]));
+    const clips = lines.map(line=> boundary.clip(line));
 
     const svgLines = clips
       .map((seg, i) => top.line(seg[0], seg[1])
@@ -111,4 +110,3 @@ svg.controls(5)
     }
 
   }, true);
-

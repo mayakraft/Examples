@@ -44,10 +44,13 @@ resetGraph();
 
 const draw = () => {
   graphLayer.removeChildren();
-	const drawing = graphLayer.graph(graph);
-	drawing.vertices.stroke("black").fill("white").childNodes
-		.forEach(vert => vert.setRadius(0.02));
-	drawing.edges.stroke("black");
+  const drawing = graphLayer.origami(graph, false);
+  drawing.vertices
+    .stroke("black")
+    .fill("white")
+    .childNodes
+    .forEach(vert => vert.setRadius(0.02));
+  drawing.edges.stroke("black");
 };
 
 draw();
