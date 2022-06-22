@@ -43,8 +43,8 @@ const folded = graph.flatFolded();
 svg.origami(graph, style, false);
 
 // find all layer solutions for the center vertex (8).
-const vertices_sectors = ear.graph.make_vertices_sectors(graph);
-const solutions = ear.layer.assignment_solver(vertices_sectors[8]);
+const vertices_sectors = ear.graph.makeVerticesSectors(graph);
+const solutions = ear.layer.assignmentSolver(vertices_sectors[8]);
 
 // onPress will toggle through solutions
 let which = 0;
@@ -55,7 +55,7 @@ const drawSolution = (solution) => {
   for (let i = 0; i < solution.assignment.length; i++) {
     graph.edges_assignment[graph.vertices_edges[8][i]] = solution.assignment[i];
   }
-  graph.edges_foldAngle = ear.graph.make_edges_foldAngle(graph);
+  graph.edges_foldAngle = ear.graph.makeEdgesFoldAngle(graph);
   // set the folded origami's layers. each solution has
   // has (potentially) multiple layer orders. get the first.
   folded.faces_layer = solution.layer[0];

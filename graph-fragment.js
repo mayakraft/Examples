@@ -1,4 +1,4 @@
-svg.size(0, 0, 7, 2)
+svg.size(-1, -1, 7, 2)
   .padding(0.05)
   .strokeWidth(0.01);
 
@@ -40,4 +40,3 @@ three.translate(5, 0)
 three.faces
   .childNodes
   .forEach((face, i, arr) => face.fill(`hsl(${i/arr.length*360}, 100%, 50%)`));
-

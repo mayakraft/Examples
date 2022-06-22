@@ -14,13 +14,13 @@ svg.controls(20)
 		Math.random()
 	])
   .onChange((point, i, points) => {
-		const hull1 = ear.math.convex_hull(points.slice(0, points.length / 2));
-		const hull2 = ear.math.convex_hull(points.slice(points.length / 2, points.length));
+		const hull1 = ear.math.convexHull(points.slice(0, points.length / 2));
+		const hull2 = ear.math.convexHull(points.slice(points.length / 2, points.length));
 		poly1.setPoints(hull1);
 		poly2.setPoints(hull2);
 		polyFill1.setPoints(hull1);
 		polyFill2.setPoints(hull2);
-		const overlap = ear.math.overlap_convex_polygons(hull1, hull2);
+		const overlap = ear.math.overlapConvexPolygons(hull1, hull2);
 		polyFill1.fill(overlap ? "#e53" : "#158");
 		polyFill2.fill(overlap ? "#e53" : "#158");
   }, true);

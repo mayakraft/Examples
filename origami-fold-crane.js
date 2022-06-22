@@ -12,18 +12,18 @@ const load = (FOLD) => {
 
   // draw origami to the right of the crease pattern
   const vertices_coords = ear.graph
-    .make_vertices_coords_folded(graph);
+    .makeVerticesCoordsFolded(graph);
   svg.origami({ ...graph, vertices_coords })
-    .translate(1.1, 1)
+    .translate(0.6, 1.2)
     .rotate(-90);
   
   // fold origami
   const folded = graph.folded();
-  folded.faces_layer = ear.layer.make_faces_layers(folded)[0];
+  folded.faces_layer = ear.layer.makeFacesLayers(folded)[0];
 
   // draw folded form
   svg.origami(folded)
-    .translate(2, 1)
+    .translate(1.5, 1.2)
     .rotate(-90);
 };
 

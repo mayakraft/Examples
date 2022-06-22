@@ -1,4 +1,6 @@
-svg.size(2.1, 1).padding(0.05);
+svg.size(2.1, 1)
+	.padding(0.05)
+	.strokeWidth(0.015);
 
 const cp = ear.cp();
 cp.segment(0.5, 0, 0.5, 1).flat();
@@ -20,12 +22,12 @@ cp.segment(0.0, 0.5, 0.25, 0.25).mountain();
 // folded form
 const face = cp.nearest(0.51, 0.51).face;
 const folded = cp.flatFolded(face);
-const conditions = ear.layer.all_layer_conditions(folded);
-const layers_face = ear.layer.topological_order(conditions[0]);
-const faces_layer = ear.graph.invert_map(layers_face);
+const conditions = ear.layer.allLayerConditions(folded);
+const layers_face = ear.layer.topologicalOrder(conditions[0], cp);
+const faces_layer = ear.graph.invertMap(layers_face);
 folded.faces_layer = faces_layer;
 
-const style = {faces:{back:{fill:"#fb4"}}}
+const style = {faces:{back:{fill:"#fb4"}}};
 
 svg.origami(cp);
 svg.origami(folded, style).translate(1.1, 0);

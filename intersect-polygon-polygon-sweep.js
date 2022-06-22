@@ -105,7 +105,7 @@ const intersect_convex_polygons = (poly1, poly2, epsilon = ear.math.EPSILON) => 
 		const right_vec = ear.math.subtract2(
 			right_poly_left_half_points[r1],
 			right_poly_left_half_points[r0]);
-		return ear.math.intersect_line_line(
+		return ear.math.intersectLineLine(
 			left_vec, left_poly_right_half_points[l0],
 			right_vec, right_poly_left_half_points[r0],
 			ear.math.include_s, ear.math.include_s, epsilon);
@@ -190,8 +190,8 @@ svg.controls(20)
 		Math.random()
 	])
 	.onChange((point, i, points) => {
-		const hull1 = ear.math.convex_hull(points.slice(0, points.length / 2)).map(p => [p[0], p[1]]);
-		const hull2 = ear.math.convex_hull(points.slice(points.length / 2, points.length)).map(p => [p[0], p[1]]);
+		const hull1 = ear.math.convexHull(points.slice(0, points.length / 2)).map(p => [p[0], p[1]]);
+		const hull2 = ear.math.convexHull(points.slice(points.length / 2, points.length)).map(p => [p[0], p[1]]);
 		poly1.setPoints(hull1);
 		poly2.setPoints(hull2);
 		console.log(hull1, hull2);

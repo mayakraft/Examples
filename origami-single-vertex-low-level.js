@@ -7,7 +7,7 @@ svg.size(2.5, 1)
 // starting from a blank square,
 // make 3 creases from the center to 3 corners.
 // the fourth will be calculated using Kawasaki's theorem.
-const base = ear.cp.square();
+const base = ear.cp.unit_square();
 base.segment([0.5, 0.5], [0, 0]);
 base.segment([0.5, 0.5], [1, 0]);
 base.segment([0.5, 0.5], [1, 1]);
@@ -23,10 +23,10 @@ const solveKawasaki = (cp) => {
   // as vectors, and we need them sorted radially.
   const edges_vectors = ear.graph.make_edges_vector(cp);
   const vectors = edges3.map(i => edges_vectors[i]);
-  const sortedVectors = ear.math.counter_clockwise_order2(vectors)
+  const sortedVectors = ear.math.counterClockwiseOrder2(vectors)
     .map(i => vectors[i]);
   // this returns solutions for 3 sectors. the large sector is at index 0
-  const solution = ear.vertex.kawasaki_solutions_vectors(sortedVectors)[0];
+  const solution = ear.singleVertex.kawasakiSolutionsVectors(sortedVectors)[0];
   if (!solution) { return; }
   cp.ray(solution, cp.vertices_coords[vertex]);
 };

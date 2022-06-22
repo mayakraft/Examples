@@ -29,7 +29,7 @@ const drawSolutions = (vectors, solutions) => {
 
 	const circles = permuts
 		.map(arr => vectors.concat(arr))
-		.map(set => ear.math.counter_clockwise_order2(set).map(i => set[i]))
+		.map(set => ear.math.counterClockwiseOrder2(set).map(i => set[i]))
 		.map((ordered, i) => {
 			const g = solutionsLayer.g();
 			ordered.map(v => Math.atan2(v[1], v[0]))
@@ -51,8 +51,8 @@ const onChange = (p, i, points) => {
     .map(ray => ray.normalize())
     .forEach(r => layer.line(r.origin, r.origin.add(r.vector)).stroke("black"));
 
-	const vectors = ear.math.counter_clockwise_order2(points).map(i => points[i]);
-  const solutions = ear.vertex.kawasaki_solutions_vectors(vectors)
+	const vectors = ear.math.counterClockwiseOrder2(points).map(i => points[i]);
+  const solutions = ear.singleVertex.kawasakiSolutionsVectors(vectors)
   	.filter(s => s !== undefined);
   solutions.map(vec => layer.line(0, 0, ...vec).stroke("#e53"));
 	

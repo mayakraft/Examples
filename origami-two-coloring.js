@@ -13,7 +13,7 @@ const folded = ear.origami(graph).folded();
 
 // an array of colors, 1 color for 1 face
 const faces_color = ear.graph
-  .make_faces_winding(folded)
+  .makeFacesWinding(folded)
   .map(v => v ? "#158" : "#fb4");
 
 // draw faces, iterate over children, set color

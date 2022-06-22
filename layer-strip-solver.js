@@ -35,19 +35,19 @@ const draw_crease_curve = (x, start_y, end_y, direction, group) => {
 
 const folded_strip_bounds = (lengths, assignments, faces_layer) => {
   const folded = ear.layer
-    .fold_strip_with_assignments(lengths, assignments);
+    .foldStripWithAssignments(lengths, assignments);
   const points = assignments.map((_, i, arr) => [
     i === arr.length - 1 ? folded[i - 1][1] : folded[i][0],
     i === 0
       ? faces_layer[0] * layer_y_scale
       : faces_layer[i - 1] * layer_y_scale
   ]);
-  return ear.math.enclosing_rectangle(points);
+  return ear.math.boundingBox(points);
 };
 
 const draw_folded_strip = (lengths, assignments, faces_layer, group) => {
   const folded = ear.layer
-    .fold_strip_with_assignments(lengths, assignments);
+    .foldStripWithAssignments(lengths, assignments);
   // black face lines
   for (let i = 0; i < folded.length; i++) {
     const layer = faces_layer[i] * layer_y_scale;
@@ -94,7 +94,7 @@ const reset = (num) => {
   do {
     lengths = randomNumbers(num);
     assignments = randomAssignments(num);
-    layers = ear.layer.single_vertex_solver(lengths, assignments);
+    layers = ear.layer.singleVertexSolver(lengths, assignments);
   } while(layers.length === 0);
   
   draw_flat_strip(lengths, assignments);
@@ -102,10 +102,10 @@ const reset = (num) => {
   const bounds = layers
     .map(layer => folded_strip_bounds(lengths, assignments, layer));
 
-  let x_off = -bounds[0].x;
+  let x_off = -bounds[0].min[0];
   const groups = layers.map((layer, i) => {
-    const group = folded_layer.g().translate(x_off - bounds[0].x, 0);
-    x_off += bounds[i].width + bounds[i].height;
+    const group = folded_layer.g().translate(x_off - bounds[0].min[0], 0);
+    x_off += bounds[i].span[0] + bounds[i].span[1];
     // console.log("bounds", bounds);
     draw_folded_strip(lengths, assignments, layer, group);
     return group;

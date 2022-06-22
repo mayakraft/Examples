@@ -3,14 +3,14 @@ svg.size(1, 1)
 	.strokeWidth(1 / 200);
 const graph = {};
 const NUM_EDGES = 20;
-const NUM_VERTS = 6;
+const NUM_VERTS = 4;
 const NUDGE = 0.015;
 
 let targets = [];
 
 const update = (epsilon) => {
   const merged = JSON.parse(JSON.stringify(graph));
-  ear.graph.remove_duplicate_vertices(merged, epsilon);
+  ear.graph.clean(merged, epsilon);
   ear.graph.populate(merged);
 
   svg.removeChildren();

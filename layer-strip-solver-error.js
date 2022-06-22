@@ -17,7 +17,7 @@ const draw_crease_curve = (x, start_y, end_y, direction, group) => {
 
 const draw_folded_strip = (lengths, assignments, faces_layer, group) => {
   const folded = ear.layer
-    .fold_strip_with_assignments(lengths, assignments);
+    .foldStripWithAssignments(lengths, assignments);
   // black face lines
   for (let i = 0; i < folded.length; i++) {
     const layer = faces_layer[i] * layer_y_scale;

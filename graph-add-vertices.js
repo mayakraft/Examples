@@ -7,7 +7,7 @@ let dots = [];
 let circles = [];
 
 const addVertex = (x, y) => {
-  ear.graph.add_vertices(graph, [[x, y]], EPSILON);
+  ear.graph.addVertices(graph, [[x, y]], EPSILON);
   svg.removeChildren();
   // graph.vertices_coords
   //   .map(coord => svg.circle(coord)

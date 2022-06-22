@@ -12,10 +12,10 @@ svg.controls(8)
   .svg(() => svg.circle(12).fill("#e53"))
   .onChange((p, i, arr) => {
     drawLayer.removeChildren();
-    const hull = ear.math.convex_hull(arr);
+    const hull = ear.math.convexHull(arr);
     polygon.setPoints(hull);
     // calculate and draw the straight skeleton lines. kawasaki lines are dashed
-    ear.math.straight_skeleton(hull)
+    ear.math.straightSkeleton(hull)
       .map(s => drawLayer.line(s.points[0], s.points[1])
         .stroke("#158")
         .strokeDasharray(s.type === "skeleton" ? "" : "12 8"));

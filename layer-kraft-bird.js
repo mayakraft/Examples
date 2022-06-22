@@ -89,7 +89,7 @@ const load = (FOLD) => {
 
   // const conditions = all_conditions.certain;
   const conditions = all_conditions[0];
-  const layers_face = ear.layer.topological_order(conditions);
+  const layers_face = ear.layer.topological_order(conditions, cp);
   // console.log(all_conditions.length, "all_conditions", all_conditions);
 
   // make some matrices for vizualization only

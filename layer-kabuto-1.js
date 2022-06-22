@@ -3,11 +3,13 @@ const kabuto = {"vertices_coords": [[0.5,0],[0.5,0.5],[1,0.5],[0.25,0.25],[0,0.5
 
 const style = { faces: { front: { fill: "#fb4"}}};
 
-svg.size(0.75, 0.4).padding(0.05);
+svg.size(0.75, 0.4)
+	.padding(0.05)
+	.strokeWidth(0.005);
 
 const folded = ear.graph(kabuto).flatFolded();
 
-const solutions = ear.layer.make_faces_layers(folded);
+const solutions = ear.layer.makeFacesLayers(folded);
 folded.faces_layer = solutions[0];
 
-svg.origami(folded, style).translate(0.8,0.3).rotate(135);
+svg.origami(folded, style).translate(1.075,0.025).rotate(135);

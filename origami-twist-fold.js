@@ -34,15 +34,15 @@ const rebuildCreases = (p, i, points) => {
   const poly_point_vectors = polygon.vectors
     .map((vec, i, arr) => [vec, ear.math.flip(arr[(i + arr.length - 1)%arr.length])]);
   const poly_bisects = poly_point_vectors
-    .map(vecs => ear.math.clockwise_bisect2(...vecs));
+    .map(vecs => ear.math.clockwiseBisect2(...vecs));
   const poly_rays = polygon.map((p, i) => ear.ray(poly_bisects[i], p));
 
   const junctions = poly_point_vectors.map((vec, i) => [vec[0], vec[1], poly_bisects[i]]);
-  const solutions = junctions.map(junction => ear.vertex.kawasaki_solutions_vectors(junction));
+  const solutions = junctions.map(junction => ear.singleVertex.kawasakiSolutionsVectors(junction));
   const kawasakiRays = solutions
     .map((three,i) => three.map(vec => ear.ray(vec, polygon[i])));
 
-  const cp = ear.cp.octogon();
+  const cp = ear.cp.octagon();
   const boundary = ear.polygon(cp.vertices_coords);
   cp.polygon(polygon).forEach(e => {
     cp.edges_assignment[e] = "M";
@@ -78,8 +78,8 @@ const rebuildCreases = (p, i, points) => {
 
   if (errorCount) { return; }
 
-  const face = ear.graph.nearest_face(cp, [0, 0]);
-  cp.vertices_coords = ear.graph.make_vertices_coords_folded(cp, face);
+  const face = ear.graph.nearestFace(cp, [0, 0]);
+  cp.vertices_coords = ear.graph.makeVerticesCoordsFolded(cp, face);
   ear.graph.translate(cp, 3);
   ear.graph.svg.faces(cp).appendTo(cpLayer).fill("#0003");
 };

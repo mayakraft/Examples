@@ -24,7 +24,7 @@ svg.controls(4)
       .map(indices => indices.map(i => points[i]))
       .map(points => ear.segment(...points));
 
-    const overlap = ear.math.overlap_line_line(
+    const overlap = ear.math.overlapLineLine(
       segments[0].vector, segments[0].origin,
       segments[1].vector, segments[1].origin,
       ear.math.include_s, ear.math.exclude_s,

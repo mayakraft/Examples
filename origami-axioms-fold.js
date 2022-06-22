@@ -58,7 +58,7 @@ const onChange = (point, i, points) => {
 	const foldLine = solutions.splice(axiomSolutionIndex, 1).shift();
 	if (foldLine === undefined) {
 		// axiom is not constructible
-		resultLayer.origami(ear.graph.square(), options);
+		resultLayer.origami(ear.graph.unit_square(), options);
 		return;
 	}
 	const origami = ear.origami().flatFold(foldLine);
@@ -73,7 +73,7 @@ const onChange = (point, i, points) => {
 
 	const arrow = ear.diagram.simple_arrow(origami, foldLine);
 	if (arrow === undefined) {
-		resultLayer.origami(ear.graph.square(), options);
+		resultLayer.origami(ear.graph.unit_square(), options);
 		return;
 	}
 	// console.log("6 error here", origami, foldLine);

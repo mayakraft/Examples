@@ -15,8 +15,8 @@ svg.controls(16)
 		Math.random()
 	])
 	.onChange((point, i, points) => {
-		const hull1 = ear.math.convex_hull(points.slice(0, points.length / 2)).map(p => [p[0], p[1]]);
-		const hull2 = ear.math.convex_hull(points.slice(points.length / 2, points.length)).map(p => [p[0], p[1]]);
+		const hull1 = ear.math.convexHull(points.slice(0, points.length / 2)).map(p => [p[0], p[1]]);
+		const hull2 = ear.math.convexHull(points.slice(points.length / 2, points.length)).map(p => [p[0], p[1]]);
 		poly1.setPoints(hull1);
 		poly2.setPoints(hull2);
 		const polygon = ear.math.intersect_polygon_polygon(hull1, hull2);

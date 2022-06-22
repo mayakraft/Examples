@@ -3,7 +3,7 @@ svg.size(1, 1)
 	.strokeWidth(0.01);
 
 const load = (graph) => {
-	const exploded = ear.graph.explode_faces(graph);
+	const exploded = ear.graph.explodeFaces(graph);
 
 	// shrink faces
 	exploded.vertices_coords = exploded.faces_vertices.map(face => {

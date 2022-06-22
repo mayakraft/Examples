@@ -1,65 +1,73 @@
-svg.size(2.3, 1).padding(0.05);
+svg.size(2.3, 1)
+  .padding(0.05)
+  .strokeWidth(0.01);
 
 const bottomLayer = svg.g();
 const origamiLayer = svg.g();
 const foldedLayer = svg.g();
-
-const flip_faces_layer = faces_layer => ear.graph.invert_map(
-  ear.graph.invert_map(faces_layer).reverse()
-);
 
 const load = (FOLD) => {
   origamiLayer.removeChildren();
   foldedLayer.removeChildren();
 
   const cp = ear.origami(FOLD);
+  const front = cp.flatFolded(0).rotateZ(5.12);
+  const back = cp.flatFolded(1).rotateZ(1.18);
+
+  // we could get the faces_layer directly
+  // const faces_layer = ear.layer.make_faces_layers(front)[0];
+  // but we want the data from the algorithm for visualization
+  const conditions = ear.layer.allLayerConditions(front);
+  const layers_face = ear.layer.topologicalOrder(conditions[0], cp);
+  const faces_layer = ear.graph.invertMap(layers_face);
+  const matrix = ear.layer.conditionsToMatrix(conditions[0]);
+  front.faces_layer = faces_layer;
+  back.faces_layer = ear.layer.flipFacesLayer(front.faces_layer);
+
+  // draw the crease pattern and folded origami
   const cpDrawing = origamiLayer.origami(cp);
   cpDrawing.faces.fill("none");
   cpDrawing.boundaries.fill("none");
   cpDrawing.edges.mountain.stroke("black");
   cpDrawing.edges.valley.stroke("black")
     .strokeDasharray("0.02 0.01");
-
-  const front = cp.folded(0).rotateZ(0.4);
-  const back = cp.folded(1).rotateZ(3.52);
-
-  const conditions = ear.layer.all_layer_conditions(front);
-  const layers_face = ear.layer.topological_order(conditions[0]);
-  const faces_layer = ear.graph.invert_map(layers_face);
-  matrix = ear.layer.conditions_to_matrix(conditions[0]);
-  front.faces_layer = faces_layer;
-  back.faces_layer = flip_faces_layer(front.faces_layer);
-
-  const front_faces = foldedLayer.origami(front)
-    .translate(1.1, 0.9)
-    .rotate(-90);
-  const back_faces = foldedLayer.origami(back)
-    .translate(2, 0.9)
-    .rotate(-135);
+  const front_faces = foldedLayer.origami(front).translate(1.1, 0.7);
+  const back_faces = foldedLayer.origami(back).translate(2, -0.2);
+  // gather both folded form's faces together in one array
   const faces = [front_faces, back_faces]
     .map(group => Array.from(group.faces.childNodes))
     .reduce((a, b) => a.concat(b), []);
+  const colors = { 1: "#38c", "-1": "#e53" };
 
   svg.onMove = (event) => {
     bottomLayer.removeChildren();
+    // get nearest face
     const near = cp.nearest(event);
-    if (near.face === undefined) { return; }
-    const face_string = `${near.face}`;
-    faces
-      .map(face => face.fill("#ddd"))
-      .filter(face => face.getAttribute("index") === face_string)
-      .forEach(face => face.fill("#fb3"));
+    if (near.face === undefined) {
+      // reset face colors before we return.
+      faces.map(face => face.fill("#ddd"));
+      return;
+    }
+    // color faces on the folded form
+    faces.forEach(face => {
+      const index = face.getAttribute("index");
+      const color = index == near.face
+        ? "#fb4"
+        : colors[matrix[near.face][index]];
+      face.fill(color || "#ddd");
+    });
+    // draw colored polygons on the crease pattern
     matrix[near.face]
       .map((value, i) => value === undefined ? undefined : { value, i })
       .filter(a => a !== undefined)
       .map(el => bottomLayer
         .polygon(cp.faces_vertices[el.i]
           .map(v => cp.vertices_coords[v]))
-        .fill(el.value === 1 ? "#38c" : "#e53"));
+        .fill(colors[el.value]));
     bottomLayer
       .polygon(cp.faces_vertices[near.face]
         .map(v => cp.vertices_coords[v]))
-      .fill("#fb3");
+      .fill("#fb4");
   };
 };
 

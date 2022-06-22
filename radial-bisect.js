@@ -11,7 +11,7 @@ const circle = svg.circle(0.12).fill("#e53");
 const onChange = function (point, i, points) {
   const vectors = points.map(p => ear.vector(p));
   const angles = points.map(p => Math.atan2(p[1], p[0]));
-  const bisectA_B = ear.math.counter_clockwise_bisect2(vectors[0], vectors[1]);
+  const bisectA_B = ear.math.counterClockwiseBisect2(vectors[0], vectors[1]);
   circle.setPosition(bisectA_B);
   wedge.setArc(0, 0, 0.75, angles[0], angles[1]);
 

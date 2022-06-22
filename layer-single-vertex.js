@@ -18,7 +18,7 @@ const junction = [
   [-0.42, 0.90],
   [-0.83, -0.55]
 ];
-const sectors = ear.math.counter_clockwise_sectors2(junction);
+const sectors = ear.math.counterClockwiseSectors2(junction);
 const lines = junction.map(vec => svg.line(vec))
 
 const draw_crease_curve = (x, start_y, end_y, direction, group) => {
@@ -32,7 +32,7 @@ const draw_crease_curve = (x, start_y, end_y, direction, group) => {
 
 const draw_folded_vertex = (lengths, assignments, faces_layer, group) => {
   const folded = ear.layer
-    .fold_strip_with_assignments(lengths, assignments);
+    .foldStripWithAssignments(lengths, assignments);
   // black face lines
   for (let i = 0; i < folded.length; i++) {
     const layer = faces_layer[i] * layer_y_scale;
@@ -69,7 +69,7 @@ const update = () => {
     .stroke(assignments[i] === "M" ? "#e53" : "#158")
     .strokeDasharray(assignments[i] === "M" ? "" : "0.0333 0.0444"));
 
-  const solutions = ear.layer.single_vertex_solver(sectors, assignments, 0.1);
+  const solutions = ear.layer.singleVertexSolver(sectors, assignments, 0.1);
 
   circle.stroke(solutions.length ? "black" : "#e53");
   circle.fill(solutions.length ? "white" : "#e531");
@@ -81,7 +81,7 @@ const update = () => {
 update();
 
 svg.onPress = (e) => {
-  const nearest = ear.math.smallest_comparison_search([e.x, e.y], junction, ear.math.distance2);
+  const nearest = ear.math.smallestComparisonSearch([e.x, e.y], junction, ear.math.distance2);
   assignments[nearest] = assignments[nearest] === "M" ? "V" : "M";
   update();
 };

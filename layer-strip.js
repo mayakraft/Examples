@@ -1,5 +1,6 @@
 svg.size(3,1)
-  .padding(0.05);
+  .padding(0.05)
+  .strokeWidth(0.01);
 
 const bottomLayer = svg.g();
 const cpLayer = svg.g();
@@ -18,13 +19,13 @@ cp.line(ear.line.fromPoints([0,0.75], [1,0.75])).mountain();
 cp.line(ear.line.fromPoints([0,0.8], [1,0.8])).valley();
 
 const folded = cp.folded(0);
-const flipFolded = cp.folded(2);
+const flipFolded = cp.folded(1);
 
-const conditions = ear.layer.all_layer_conditions(folded);
-const layers_face = ear.layer.topological_order(conditions[0]);
-const faces_layer = ear.graph.invert_map(layers_face);
+const conditions = ear.layer.allLayerConditions(folded);
+const layers_face = ear.layer.topologicalOrder(conditions[0], cp);
+const faces_layer = ear.graph.invertMap(layers_face);
 flipFolded.faces_layer = faces_layer;
-folded.faces_layer = ear.graph.invert_map(layers_face.slice().reverse());
+folded.faces_layer = ear.graph.invertMap(layers_face.slice().reverse());
 
 const drawing = cpLayer.origami(cp);
 drawing.faces.fill("none");
@@ -34,11 +35,11 @@ drawing.edges.valley.stroke("#38c");
 
 cpLayer.origami(folded)
   .scale(2)
-  .translate(0.35,0.1);
+  .translate(0.35, 0.3);
 
 cpLayer.origami(flipFolded)
   .scale(2)
-  .translate(1,0.1);
+  .translate(1,0);
 
 const drawNearest = (near) => {
   if (near.face === undefined) { return; }

@@ -4,7 +4,7 @@ svg.size(1, 1)
 
 const points = Array.from(Array(20))
 	.map(() => [Math.random(), Math.random()]);
-const hull = ear.math.convex_hull(points);
+const hull = ear.math.convexHull(points);
 const polygon = ear.polygon(hull);
 
 const backLine = svg.line()

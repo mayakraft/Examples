@@ -103,14 +103,14 @@ const load = (FOLD) => {
   cp = ear.origami(FOLD);
   const folded = cp.folded().rotateZ(Math.PI * 3 / 4);
   const matrix = ear.layer
-    .conditions_to_matrix(ear.layer
-      .unsigned_to_signed_conditions(ear.layer
-        .make_conditions(folded)));
+    .conditionsToMatrix(ear.layer
+      .unsignedToSignedConditions(ear.layer
+        .makeConditions(folded)));
 
-  const all_conditions = ear.layer.all_layer_conditions(folded);
-  layers_face = ear.layer.topological_order(all_conditions[0]);
+  const all_conditions = ear.layer.allLayerConditions(folded);
+  layers_face = ear.layer.topologicalOrder(all_conditions[0], cp);
 
-  const faces_layer = ear.graph.invert_map(layers_face);
+  const faces_layer = ear.graph.invertMap(layers_face);
   const foldedFaces = folded.faces_vertices
     .map(vertices => vertices
       .map(v => folded.vertices_coords[v]));
@@ -131,11 +131,11 @@ const load = (FOLD) => {
   draw_matrix(matrix).appendTo(layer);
 
   const matrix2 = ear.layer
-    .conditions_to_matrix(all_conditions.certain);
+    .conditionsToMatrix(all_conditions.certain);
   draw_matrix(matrix2).translate(1.2,0).appendTo(layer);
 
   const matrix3 = ear.layer
-    .conditions_to_matrix(all_conditions[0]);
+    .conditionsToMatrix(all_conditions[0]);
   draw_matrix(matrix3).translate(2.4,0).appendTo(layer);
 
   layer.text("(a)", 0.4, 1.2).fontSize("0.13pt");

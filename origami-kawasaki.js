@@ -18,10 +18,10 @@ const junctionLines = Array.from(Array(NUM_LINES))
 const onChange = (p, i, points) => {
   junctionLines[i].setPoints(0, 0, p[0], p[1]);
 
-  const sectors = ear.math.counter_clockwise_sectors2(points);
-  const kawasaki = ear.vertex.alternating_sum(sectors)
+  const sectors = ear.math.counterClockwiseSectors2(points);
+  const kawasaki = ear.singleVertex.alternatingSum(sectors)
     .map(n => 0.5 + 0.5 * (Math.PI - n) / (Math.PI) );
-  // const kawasaki = ear.vertex.alternating_sum_difference(sectors)
+  // const kawasaki = ear.singleVertex.alternatingSumDifference(sectors)
   //   .map(n => n / Math.PI)
   //   .map(n => 0.5 - 0.5 * n);
 
@@ -31,7 +31,7 @@ const onChange = (p, i, points) => {
     : ["#158", "#e53"];
   sectorLayer.removeChildren();
 
-  ear.math.counter_clockwise_order2(points)
+  ear.math.counterClockwiseOrder2(points)
     .map(i => points[i])
     .map(v => Math.atan2(v[1], v[0]))
     .map((_, i, arr) => [arr[i], arr[(i + 1) % arr.length]])

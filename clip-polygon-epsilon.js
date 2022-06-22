@@ -2,9 +2,9 @@ const EPSILON = 0.1;
 const colors = ["#fb4", "#158", "#e53"];
 const colorCircle = "#ca8";
 // make 2 kinds of polygons: inclusive and exclusive
-const hull1 = ear.math.convex_hull(Array.from(Array(20))
+const hull1 = ear.math.convexHull(Array.from(Array(20))
 	.map(() => [Math.random(), Math.random()]));
-const hull2 = ear.math.convex_hull(Array.from(Array(20))
+const hull2 = ear.math.convexHull(Array.from(Array(20))
 	.map(() => [Math.random() + 1.2, Math.random()]));
 const polygon1 = ear.polygon(hull1).inclusive();
 const polygon2 = ear.polygon(hull2).exclusive();

@@ -80,7 +80,7 @@ const shrinkArrow = (segment) => {
 
 const controlsOnChange = function (point, i, points) {
   const params = toAxiomParams(points);
-  origami = ear.graph.square();
+  origami = ear.graph.unit_square();
   // origamiSVG.load( ear.svg(origami, origamiStyle) );
   drawParams(params);
 	// console.log("axiom params", params);

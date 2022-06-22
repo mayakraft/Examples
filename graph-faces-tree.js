@@ -13,7 +13,7 @@ const drawTree = (graph, face) => {
   topLayer.removeChildren();
   const center = ear.math.centroid(graph.faces_vertices[face]
     .map(v => graph.vertices_coords[v]));
-  const tree = ear.graph.make_face_spanning_tree(graph, face);
+  const tree = ear.graph.makeFaceSpanningTree(graph, face);
   tree.forEach(row => row.forEach(el => {
     if (el.parent == null) { return; }
     topLayer.line(graph.faces_center[el.face], graph.faces_center[el.parent])
@@ -25,7 +25,7 @@ const drawTree = (graph, face) => {
 };
 
 svg.onMove = (event) => {
-  const face = ear.graph.nearest_face(crane, [event.x, event.y]);
+  const face = ear.graph.nearestFace(crane, [event.x, event.y]);
   if (face === undefined) { return; }
   if (face !== last_face) {
     drawTree(crane, face);
@@ -37,8 +37,8 @@ svg.onMove = (event) => {
 const load = (graph) => {
   crane = graph;
 
-  crane.faces_center = ear.graph.make_faces_center(crane);
-  ear.graph.make_face_spanning_tree(crane, 0);
+  crane.faces_center = ear.graph.makeFacesCenter(crane);
+  ear.graph.makeFaceSpanningTree(crane, 0);
 
   bottomLayer.removeChildren();
   const drawing = bottomLayer.origami(crane);

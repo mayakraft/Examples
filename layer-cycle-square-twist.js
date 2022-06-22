@@ -3,12 +3,13 @@ const squareTwist = ear.graph({"vertices_coords":[[0,0],[1/3,0],[2/3,0],[1,0],[1
 const squareTwistInvalid = ear.graph({"vertices_coords":[[0,0],[1/3,0],[1,0],[1,1/3],[2/3,1],[1,1],[0,2/3],[0,1],[0.5,0],[0.5,1],[0,0.5],[1,0.5],[0.5,1/3],[0.5,2/3],[1/3,0.5],[2/3,0.5]],"edges_vertices":[[0,1],[2,3],[4,5],[6,7],[1,8],[9,4],[10,6],[3,11],[8,12],[13,9],[10,14],[15,11],[14,12],[14,13],[13,15],[12,15],[8,2],[12,3],[0,10],[1,14],[7,9],[6,13],[11,5],[15,4]],"edges_assignment":["B","B","B","B","B","B","B","B","M","M","M","M","M","M","M","M","B","V","B","V","B","V","B","V"],"edges_foldAngle":[0,0,0,0,0,0,0,0,-180,-180,-180,-180,-180,-180,-180,-180,0,180,0,180,0,180,0,180],"faces_vertices":[[10,0,1,14],[14,1,8,12],[8,2,3,12],[12,3,11,15],[15,4,9,13],[5,4,15,11],[13,6,10,14],[7,6,13,9],[14,12,15,13]]});
 
 svg.size(4, 1)
-  .padding(0.05);
+  .padding(0.05)
+  .strokeWidth(0.01);
 
 svg.origami(squareTwistInvalid);
 svg.origami(squareTwistInvalid.folded()).translate(1 + 1/6, 1/6);
 
 svg.origami(squareTwist).translate(2, 0);
 const folded = squareTwist.folded();
-folded.faces_layer = ear.layer.make_faces_layers(folded)[0];
+folded.faces_layer = ear.layer.makeFacesLayers(folded)[0];
 svg.origami(folded).translate(3 + 1/6, 1/6);

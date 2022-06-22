@@ -2,7 +2,7 @@ svg.size(1, 1)
   .padding(0.1)
   .strokeWidth(0.01)
   
-const graph = ear.graph.square();
+const graph = ear.graph.unit_square();
 svg.origami(graph);
 const g = svg.g();
 

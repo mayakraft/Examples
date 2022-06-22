@@ -36,7 +36,7 @@ const resetGraph = () => {
   vertex_map = graph.vertices_coords.map((_, i) => i)
 
   ear.graph.clean(graph);
-  const isolated = ear.graph.get_isolated_vertices(graph);
+  const isolated = ear.graph.getIsolatedVertices(graph);
   ear.graph.remove(graph, "vertices", isolated);
 };
 
@@ -56,7 +56,7 @@ const draw = () => {
 draw();
 
 const animUpdate = () => {
-  const result = ear.graph.remove_duplicate_vertices(graph, 0.02);
+  const result = ear.graph.removeDuplicateVertices(graph, 0.02);
   if (result.remove.length) {
     if (graph.vertices_coords.length < 5 && timer === undefined) {
       timer = setTimeout(resetGraph, 5000);

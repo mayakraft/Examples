@@ -12,7 +12,7 @@ const folded = origami.flatFolded();
 
 // solve the layer order (it's always the same. [0,2,1])
 folded.faces_layer = ear.layer
-  .make_faces_layers(folded)[0];
+  .makeFacesLayers(folded)[0];
 
 // draw a folded copy of the origami
 svg.origami(folded).translate(3.5, -0.25);

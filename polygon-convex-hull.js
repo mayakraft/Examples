@@ -13,7 +13,7 @@ const onChange = (p, i, points) => {
 	const corners = polygon.vectors
 		.map((v, i, arr) => [v, ear.math.flip(arr[(i - 1 + arr.length) % arr.length])]);
 
-	corners.map(pair => ear.math.clockwise_bisect2(...pair))
+	corners.map(pair => ear.math.clockwiseBisect2(...pair))
 		.map(vec => ear.math.scale(vec, 0.2))
 		.map((vec, i) => [polygon[i], ear.math.add(polygon[i], vec)])
 		.map(seg => layer.line(seg[0], seg[1]).stroke("#fb4"));

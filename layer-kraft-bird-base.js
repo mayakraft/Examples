@@ -73,7 +73,7 @@ const load = (FOLD) => {
   const folded = cp.flatFolded(1);
 
   // 1. all solutions,
-  const all_conditions = ear.layer.all_layer_conditions(folded);
+  const all_conditions = ear.layer.allLayerConditions(folded);
   // 2. or, one solution only.
   // const all_conditions = [ear.layer.one_layer_conditions(folded)];
   // 3. or, with a dividing axis, all solutions
@@ -83,7 +83,7 @@ const load = (FOLD) => {
 
   // const conditions = all_conditions.certain;
   const conditions = all_conditions[0];
-  const layers_face = ear.layer.topological_order(conditions);
+  const layers_face = ear.layer.topologicalOrder(conditions, cp);
   // console.log(all_conditions.length, "all_conditions", all_conditions);
 
   // make some matrices for vizualization only
@@ -97,7 +97,7 @@ const load = (FOLD) => {
     });
 
   // draw things
-  folded.faces_layer = ear.graph.invert_map(layers_face);
+  folded.faces_layer = ear.graph.invertMap(layers_face);
   foldedLayer.origami(folded, false);
   delete folded.faces_layer;
   const facePolys = folded.faces_vertices

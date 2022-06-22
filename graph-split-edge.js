@@ -6,18 +6,18 @@ const graph = ear.graph.kite();
 svg.origami(graph);
 
 const splitGraph = (g, edge, pos) => {
-  ear.graph.split_edge(g, edge, [pos[0], pos[1]]);
+  ear.graph.splitEdge(g, edge, [pos[0], pos[1]]);
   svg.removeChildren();
 	svg.origami(g);
 };
 
 svg.onPress = (event) => {
-  const edge = ear.graph.nearest_edge(graph, event.position);
+  const edge = ear.graph.nearestEdge(graph, event.position);
   splitGraph(graph, edge, event.position);
 };
 
 svg.onMove = (event) => {
-  const edge = ear.graph.nearest_edge(graph, event.position);
+  const edge = ear.graph.nearestEdge(graph, event.position);
   splitGraph(JSON.parse(JSON.stringify(graph)), edge, event.position);
 };
 

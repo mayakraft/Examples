@@ -4,7 +4,7 @@ svg.size(2.5, 1)
 	.overflow("visible");
 
 const graphLayer = svg.g();
-const base = ear.cp.square();
+const base = ear.cp.unit_square();
 // add a vertex in the middle. this vertex will move around.
 let vertex = ear.graph.add_vertices(base, [0.5, 0.5]).shift();
 // 3 new edges connecting corners to the new vertex
@@ -34,7 +34,7 @@ const update = (point) => {
   // this gives us (possible) solutions for all 3 sectors. the large sector
   // is at index 2, this is the only one we're looking to solve.
 	const edges_vectors = edges3.map(i => origami.edges_vector[i]);
-	const sortedVectors = ear.math.counter_clockwise_order2(edges_vectors)
+	const sortedVectors = ear.math.counterClockwiseOrder2(edges_vectors)
 		.map(i => edges_vectors[i]);
   // this returns solutions for 3 sectors. the large sector is at index 2
   const solution = ear.single.kawasaki_solutions_vectors(sortedVectors)[2];

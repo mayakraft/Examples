@@ -16,7 +16,7 @@ const vmin = (svg.getWidth() > svg.getHeight()
 
 const onChange = function (point, i, points) {
   const vectors = ear.math
-    .counter_clockwise_order2(points)
+    .counterClockwiseOrder2(points)
     .map(i => points[i]);
 
   topLayer.removeChildren();

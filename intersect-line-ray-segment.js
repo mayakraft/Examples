@@ -55,12 +55,12 @@ const redraw = function (p, i, points) {
   intersections
     .map(xing => xing.angles.map((_, i) => {
       const a = [xing.angles[i], xing.angles[(i + 1) % xing.angles.length]];
-      const dp = ear.math.counter_clockwise_bisect2(
+      const dp = ear.math.counterClockwiseBisect2(
         [Math.cos(a[0]), Math.sin(a[0])],
         [Math.cos(a[1]), Math.sin(a[1])]
       );
       const lc = (i === 3) ? Math.PI * 2 : 0;
-      const interior = ear.math.counter_clockwise_angle_radians(a[0], a[1] + lc);
+      const interior = ear.math.counterClockwiseAngleRadians(a[0], a[1] + lc);
       const r = wedgeSpace / (interior ** 0.866);
       const p = [xing.p[0] + dp[0] * r, xing.p[1] + dp[1] * r];
       return xingLayer.wedge(p[0], p[1], wedgeRadius, a[0], a[1])

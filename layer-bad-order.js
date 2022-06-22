@@ -5,7 +5,9 @@ const crane = {
   edges_assignment: ["M","M","V","M","V","V","M","M","M","M","V","M","M","V","B","M","B","M","M","M","V","M","V","V","V","M","M","M","M","V","M","M","V","M","V","V","M","V","M","B","M","M","V","V","M","M","M","M","M","M","V","M","V","M","M","V","M","M","V","M","V","M","M","M","V","V","V","B","B","B","B","V","M","M","V","M","V","V","B","V","V","M","M","M","M","V","M","B","B","V","V","V","M","M","V","M","V","B","B","V","V","M","M","M","M","M","M","V","M","M","M","V","M","V"]
 };
 
-svg.size(2.25, 1).padding(0.05);
+svg.size(2.25, 1)
+  .padding(0.05)
+  .strokeWidth(0.01);
 
 const cp = ear.origami(crane);
 const cpDrawing = svg.origami(cp);
@@ -14,11 +16,11 @@ cpDrawing.edges.valley.stroke("#38b");
 
 svg.origami(cp.folded(19))
   .rotate(-90)
-  .translate(-0.9, 1.1);
+  .translate(-0.9, 1.5);
 
 const folded = cp.folded(19);
 folded.faces_layer = cp.faces_vertices
   .map((_, i) => i);
 svg.origami(folded)
   .rotate(-90)
-  .translate(-0.9, 1.7);
+  .translate(-0.9, 2.1);

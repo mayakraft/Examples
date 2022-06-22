@@ -15,7 +15,7 @@ const draw = (graph, face) => {
   topLayer.removeChildren();
   const center = ear.math.centroid(graph.faces_vertices[face]
     .map(v => graph.vertices_coords[v]));
-  const tree = ear.graph.make_face_spanning_tree(graph, face);
+  const tree = ear.graph.makeFaceSpanningTree(graph, face);
   tree.forEach(row => row.forEach(el => {
     if (el.parent == null) { return; }
     topLayer.line(graph.faces_center[el.face], graph.faces_center[el.parent])
@@ -34,7 +34,10 @@ const draw = (graph, face) => {
 };
 
 svg.onMove = (event) => {
-  const face = ear.graph.nearest_face(crane, [event.x, event.y]);
+  const point = event.x > 1.1
+    ? [event.x - 1.2, event.y]
+    : [event.x, event.y];
+  const face = ear.graph.nearestFace(crane, point);
   if (face === undefined) { return; }
   if (face !== last_face) {
     draw(crane, face);
@@ -47,8 +50,8 @@ const load = (graph) => {
   crane = graph;
   const start_face = 4;
 
-  crane.faces_center = ear.graph.make_faces_center(crane);
-  ear.graph.make_face_spanning_tree(crane, start_face);
+  crane.faces_center = ear.graph.makeFacesCenter(crane);
+  ear.graph.makeFaceSpanningTree(crane, start_face);
 
   // draw the two crease patterns
   bottomLayer.removeChildren();

@@ -12,7 +12,7 @@ const style = {
 // starting from a blank square,
 // make 3 creases from the center to 3 corners.
 // the fourth will be calculated using Kawasaki's theorem.
-const base = ear.cp.square();
+const base = ear.cp.unit_square();
 base.segment([0.5, 0.5], [0, 0]);
 base.segment([0.5, 0.5], [1, 0]);
 base.segment([0.5, 0.5], [1, 1]);
@@ -27,7 +27,7 @@ const update = (point) => {
   point = ({
     x: Math.max(Math.min(point.x, 1 - 1e-6), 1e-6),
     y: Math.max(Math.min(point.y, 1 - 1e-6), 1e-6),
-  })
+  });
 
   // clone the cp from the base (3 creases)
   // set the center vertex to the point from the touch handler.
@@ -36,7 +36,7 @@ const update = (point) => {
 
   // using the angles between the 3 existing crease, this
   // will generate a fourth crease that satisfies Kawasaki.
-  const solution = ear.vertex.kawasaki_solutions(cp, vertex);
+  const solution = ear.singleVertex.kawasakiSolutions(cp, vertex);
   if (!solution) { return; }
   cp.ray(solution, cp.vertices_coords[vertex]);
 
@@ -44,8 +44,8 @@ const update = (point) => {
   const folded = cp.flatFolded();
 
   // solve layer order
-  const faces_layer = ear.layer.make_faces_layers(folded)[3];
-  cp.edges_assignment = ear.layer.faces_layer_to_edges_assignments(folded, faces_layer);
+  const faces_layer = ear.layer.makeFacesLayers(folded)[3];
+  cp.edges_assignment = ear.layer.facesLayerToEdgesAssignments(folded, faces_layer);
   folded.faces_layer = faces_layer;
 
   // draw things

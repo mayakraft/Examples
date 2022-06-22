@@ -16,7 +16,7 @@ const onChange = function (point, i, points) {
   const angles = points.map(p => Math.atan2(p[1], p[0]));
   lines.forEach((line, i) => line
     .setPoints(points[i]));
-  ear.math.counter_clockwise_order2(vectors)
+  ear.math.counterClockwiseOrder2(vectors)
     .map((index, i, arr) => [index, arr[(i + 1) % arr.length]])
     .map((pair, i) => layer
     .wedge(0, 0, 0.8, angles[pair[0]], angles[pair[1]])

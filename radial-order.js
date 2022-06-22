@@ -42,7 +42,7 @@ const onChange = function (point, i, points) {
 	arrowArc.setArc(0, 0, 1, angles[0], angles[0] + 0.4);
   lines.forEach((line, i) => line
     .setPoints(vectors[i].scale((i/(NUM-1)*0.75 + 0.25))));
-  const order = ear.math.counter_clockwise_order2(...vectors);
+  const order = ear.math.counterClockwiseOrder2(...vectors);
   // const order = ear.math.counter_clockwise_order_radians(...angles);
   if (callback) {
     callback({ order });

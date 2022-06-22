@@ -7,7 +7,7 @@ const load = (graph) => {
 	cp.edges.mountain.stroke("#158");
 	cp.edges.valley.stroke("#e53");
 	
-	const boundary = ear.graph.get_boundary(graph);
+	const boundary = ear.graph.getBoundary(graph);
 	ear.graph.subgraph(graph, boundary);
 	
 	svg.origami(graph)

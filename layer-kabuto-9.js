@@ -1,28 +1,26 @@
 svg.size(5.15, 1)
-  .padding(0.05);
-
-const style = {
-  faces: { front: { fill: "#white"}, back: { fill: "#ddd" }}
-};
+  .padding(0.05)
+  .strokeWidth(0.01);
 
 const load = (FOLD) => {
   svg.removeChildren();
 
-  const cp = FOLD;
-  const folded = ear.graph(cp).populate().flatFolded();
+  // fold crease pattern
+  const folded = ear.graph(FOLD).flatFolded();
   
   // get all folded states
-  const faces_layers = ear.layer.make_faces_layers(folded);
+  const faces_layers = ear.layer.makeFacesLayers(folded);
   
   // draw all folded states
   faces_layers.forEach((faces_layer, i) => {
-    const col = 0.8 * (i % 5) + 2;
-    const row = 0.3 + 0.5 * Math.floor(i / 5);
+    const col = 2.25 + 0.8 * (i % 5);
+    const row = 0.1 + 0.5 * Math.floor(i / 5);
     folded.faces_layer = faces_layer;
     svg.origami(folded).translate(col, row).rotate(135);
   });
 
-  svg.origami(cp);
+  // draw crease pattern
+  svg.origami(FOLD);
 };
 
 // kabuto cp

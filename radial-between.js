@@ -13,7 +13,7 @@ const onChange = function (point, i, points) {
   const angles = points.map(p => Math.atan2(p[1], p[0]));
   wedge.setArc(0, 0, 0.5, angles[0], angles[1]);
   lines.forEach((line, i) => line.setPoints(points[i]));
-  const isBetween = ear.math.is_counter_clockwise_between(angles[2], angles[0], angles[1]);
+  const isBetween = ear.math.isCounterClockwiseBetween(angles[2], angles[0], angles[1]);
   circle.setPosition(vectors[2].scale(1.15))
     .fill(isBetween ? "#fb4" : "black");
 };

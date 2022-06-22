@@ -1,6 +1,10 @@
 var callback;
 
-const graph = {};
+const graph = {
+	vertices_coords: [],
+	edges_vertices: [],
+	edges_assignment: [],
+};
 const SIZE = 8;
 const wave = 1;
 
@@ -17,26 +21,24 @@ points.forEach((row, j) => {
 		// crease zig zag rows
 		if (i < row.length-1) {
 			const nextHorizPoint = row[ (i+1)%row.length ];
-			const res = ear.graph.assign(graph, {
-				vertices_coords: [point, nextHorizPoint],
-				edges_vertices: [[0, 1]],
-				edges_assignment: [j % 2 === 0 ? "M" : "V"],
-			});
+			graph.vertices_coords.push(point, nextHorizPoint);
+			graph.edges_vertices.push([graph.vertices_coords.length - 2, graph.vertices_coords.length - 1]);
+			graph.edges_assignment.push(j % 2 === 0 ? "M" : "V");
 		}
 		// crease lines connecting between zig zag rows
 		if (j < points.length-1) {
 			const nextRow = points[ (j+1)%points.length ];
 			const nextVertPoint = nextRow[ i ];
-			const res = ear.graph.assign(graph, {
-				vertices_coords: [point, nextVertPoint],
-				edges_vertices: [[0, 1]],
-				edges_assignment: [(i + j + 1) % 2 === 0 ? "M" : "V"],
-			});
+			graph.vertices_coords.push(point, nextVertPoint);
+			graph.edges_vertices.push([graph.vertices_coords.length - 2, graph.vertices_coords.length - 1]);
+			graph.edges_assignment.push((i + j + 1) % 2 === 0 ? "M" : "V");
 		}
 	});
 });
 
-ear.graph.get_planar_boundary(graph).edges.forEach(edge => {
+ear.graph.clean(graph);
+
+ear.graph.getPlanarBoundary(graph).edges.forEach(edge => {
 	graph.edges_assignment[edge] = "B";
 });
 

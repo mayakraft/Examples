@@ -1,5 +1,5 @@
 svg.size(-10, -10, 20, 20);
-svg.background('white');
+// svg.background('white');
 
 var phipi = Math.PI / (Math.sqrt(5) + 1) * 4;
 

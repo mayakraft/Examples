@@ -92,7 +92,7 @@ const load = (FOLD) => {
   console.log(conditions.length, "solutions", conditions);
 
   if (conditions.length) {
-    const layers_face = ear.layer.topological_order(conditions[0]);
+    const layers_face = ear.layer.topological_order(conditions[0], cp);
     layers_up = ear.graph.invert_map(layers_face);
     layers_flipped = ear.graph.invert_map(layers_face.slice().reverse());
     console.log("layers_face", layers_face);

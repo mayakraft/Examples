@@ -76,7 +76,7 @@ const load = (FOLD) => {
 
   const cp = ear.origami(FOLD);
   const folded = cp.folded().rotateZ(-Math.PI/2);
-  const matrix = ear.graph.make_faces_faces_overlap(folded, 0.001);
+  const matrix = ear.graph.makeFacesFacesOverlap(folded, 0.001);
   const foldedFaces = folded.faces_vertices
     .map(vertices => vertices
       .map(v => folded.vertices_coords[v]));
