@@ -2,12 +2,12 @@ const { subtract, magnitude, mag_squared, cross2, dot } = ear.math;
 
 const EPSILON = 0.5;
 
-const include_l = () => true;
-const include_r = (t, e=EPSILON) => t > -e;
-const include_s = (t, e=EPSILON) => t > -e && t < 1 + e;
-const exclude_l = () => true;
-const exclude_r = (t, e=EPSILON) => t > e;
-const exclude_s = (t, e=EPSILON) => t > e && t < 1 - e;
+const includeL = () => true;
+const includeR = (t, e=EPSILON) => t > -e;
+const includeS = (t, e=EPSILON) => t > -e && t < 1 + e;
+const excludeL = () => true;
+const excludeR = (t, e=EPSILON) => t > e;
+const excludeS = (t, e=EPSILON) => t > e && t < 1 - e;
 
 const collinear = (point, vector, origin, compFunc, epsilon = EPSILON) => {
   const p2p = subtract(point, origin);
@@ -23,8 +23,8 @@ const collinear = (point, vector, origin, compFunc, epsilon = EPSILON) => {
   return Math.abs(cross) < epsilon && compFunc(proj, epsilon);
 };
 
-const point_on_ray_inclusive = (point, vector, origin, epsilon = EPSILON) => collinear(point, vector, origin, include_r, epsilon);
-const point_on_ray_exclusive = (point, vector, origin, epsilon = EPSILON) => collinear(point, vector, origin, exclude_r, epsilon);
+const point_on_ray_inclusive = (point, vector, origin, epsilon = EPSILON) => collinear(point, vector, origin, includeR, epsilon);
+const point_on_ray_exclusive = (point, vector, origin, epsilon = EPSILON) => collinear(point, vector, origin, excludeR, epsilon);
 
 
 const radius = EPSILON / 4;

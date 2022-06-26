@@ -27,7 +27,7 @@ svg.controls(4)
     const overlap = ear.math.overlapLineLine(
       segments[0].vector, segments[0].origin,
       segments[1].vector, segments[1].origin,
-      ear.math.include_s, ear.math.exclude_s,
+      ear.math.includeS, ear.math.excludeS,
 			EPSILON);
 
 		const color = overlap ? "#fb4" : "black";

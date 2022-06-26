@@ -1,4 +1,5 @@
-svg.size(0, -0.5, 5, 2);
+svg.size(0, -0.5, 5, 2)
+  .strokeWidth(0.01);
 
 const origami = ear.cp.rectangle(3,1);
 origami.line([Math.random()-0.5, 1], [1, 0.5]).valley();

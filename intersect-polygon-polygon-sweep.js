@@ -108,7 +108,7 @@ const intersect_convex_polygons = (poly1, poly2, epsilon = ear.math.EPSILON) => 
 		return ear.math.intersectLineLine(
 			left_vec, left_poly_right_half_points[l0],
 			right_vec, right_poly_left_half_points[r0],
-			ear.math.include_s, ear.math.include_s, epsilon);
+			ear.math.includeS, ear.math.includeS, epsilon);
 	};
 
 	const zipper = [];

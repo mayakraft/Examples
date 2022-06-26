@@ -44,7 +44,7 @@ const onChange = (point, i, points) => {
 	// the longer approach. manually filter. we need this data for visualization
 	const solutions = ear.axiom(axiom, params);
 	// console.log("solutions", solutions);
-	const valid = ear.axiom.validate(axiom, params, boundary);
+	const valid = ear.axiom.validate(axiom, params, boundary, solutions);
 	// console.log("valid", valid);
 	const isValid = valid[axiomSolutionIndex % valid.length];
 	// console.log("isValid", isValid);
@@ -58,7 +58,7 @@ const onChange = (point, i, points) => {
 	const foldLine = solutions.splice(axiomSolutionIndex, 1).shift();
 	if (foldLine === undefined) {
 		// axiom is not constructible
-		resultLayer.origami(ear.graph.unit_square(), options);
+		resultLayer.origami(ear.graph.square(), options);
 		return;
 	}
 	const origami = ear.origami().flatFold(foldLine);
@@ -73,7 +73,7 @@ const onChange = (point, i, points) => {
 
 	const arrow = ear.diagram.simple_arrow(origami, foldLine);
 	if (arrow === undefined) {
-		resultLayer.origami(ear.graph.unit_square(), options);
+		resultLayer.origami(ear.graph.square(), options);
 		return;
 	}
 	// console.log("6 error here", origami, foldLine);

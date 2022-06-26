@@ -8,9 +8,9 @@ const load = (graph) => {
 	cp.edges.valley.stroke("#e53");
 	
 	const boundary = ear.graph.getBoundary(graph);
-	ear.graph.subgraph(graph, boundary);
+	const subgraph = ear.graph.subgraph(graph, boundary);
 	
-	svg.origami(graph)
+	svg.origami(subgraph)
 	  .translate(1.1, 0)
 	  .vertices
 	  .fill("black")

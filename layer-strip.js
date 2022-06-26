@@ -18,8 +18,8 @@ cp.line(ear.line.fromPoints([0,0.7], [1,0.7])).mountain();
 cp.line(ear.line.fromPoints([0,0.75], [1,0.75])).mountain();
 cp.line(ear.line.fromPoints([0,0.8], [1,0.8])).valley();
 
-const folded = cp.folded(0);
-const flipFolded = cp.folded(1);
+const folded = cp.flatFolded(0);
+const flipFolded = cp.flatFolded(1);
 
 const conditions = ear.layer.allLayerConditions(folded);
 const layers_face = ear.layer.topologicalOrder(conditions[0], cp);

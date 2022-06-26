@@ -14,7 +14,7 @@ const bottom = svg.g();
 const top = svg.g();
 
 const angle = (Math.random()*0.2 + 0.75) * Math.PI;
-let graph = ear.graph.flat_fold(ear.graph.unit_square(), [Math.cos(angle), Math.sin(angle)], [0.25, 0.25]);
+let graph = ear.graph.flat_fold(ear.graph.square(), [Math.cos(angle), Math.sin(angle)], [0.25, 0.25]);
 const vertices_coords = ear.graph.make_vertices_coords_folded(graph);
 top.load( ear.svg({ ...graph, vertices_coords }, style));
 const cp = ear.graph.translate(JSON.parse(JSON.stringify(graph)), 1.25, 0);

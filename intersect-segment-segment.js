@@ -55,8 +55,8 @@ svg.controls(8)
     //       .strokeWidth(radius/2)));
 
     const type = [
-      ear.math.include_s, ear.math.include_s,
-      ear.math.exclude_s, ear.math.exclude_s
+      ear.math.includeS, ear.math.includeS,
+      ear.math.excludeS, ear.math.excludeS
     ];
 
     points.forEach(p => p.svg.fill("#e53"));

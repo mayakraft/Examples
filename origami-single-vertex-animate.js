@@ -4,7 +4,7 @@ svg.size(2.5, 1)
 	.overflow("visible");
 
 const graphLayer = svg.g();
-const base = ear.cp.unit_square();
+const base = ear.cp.square();
 // add a vertex in the middle. this vertex will move around.
 let vertex = ear.graph.add_vertices(base, [0.5, 0.5]).shift();
 // 3 new edges connecting corners to the new vertex

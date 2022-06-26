@@ -42,7 +42,7 @@ const rebuildCreases = (p, i, points) => {
   const kawasakiRays = solutions
     .map((three,i) => three.map(vec => ear.ray(vec, polygon[i])));
 
-  const cp = ear.cp.octagon();
+  const cp = ear.cp.polygon(8, 1.414);
   const boundary = ear.polygon(cp.vertices_coords);
   cp.polygon(polygon).forEach(e => {
     cp.edges_assignment[e] = "M";

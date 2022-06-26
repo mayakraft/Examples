@@ -68,8 +68,8 @@ const draw = (event) => {
 	    edge_segment[0],
 	    segment.vector,
 	    segment[0],
-	    ear.math.include_s,
-	    ear.math.include_s);
+	    ear.math.includeS,
+	    ear.math.includeS);
 	  if (intersect) {
 	    boxes_svg[e].fill("#fb48").stroke("#fb4");
 	    frontLayer.circle(intersect).radius(0.01);

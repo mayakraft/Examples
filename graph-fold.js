@@ -1,7 +1,7 @@
 svg.size(100, 100);
 svg.background('transparent');
 
-let graph = ear.graph.unit_square();
+let graph = ear.graph.square();
 svg.load(ear.svg(graph, { vertices: true, attributes: { circle: { r: 0.01 }} }));
 svg.size(-0.05, -0.05, 1.1, 1.1);
 

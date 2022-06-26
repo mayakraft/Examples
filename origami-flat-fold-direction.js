@@ -25,7 +25,7 @@ svg.controls(2)
     // to ensure consistency across other systems too
     // get the line's normal from the u-d parameterization
     const line = ear.line.fromPoints(...points);
-    const normal = ear.vector(ear.math.vectorOriginToUD(line).u);
+    const normal = ear.vector(ear.math.makeNormalDistanceLine(line).normal);
     const midpoint = ear.segment(points).midpoint();
 
     const origami = ear.origami().flatFold(line);

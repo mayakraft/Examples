@@ -2,7 +2,7 @@ svg.size(1, 1)
 	.padding(0.05)
 	.strokeWidth(1 / 100);
 
-const graph = ear.graph.unit_square();
+const graph = ear.graph.square();
 
 let mouse = ear.vector(0.5, 0.5);
 let angle = 0.1;
